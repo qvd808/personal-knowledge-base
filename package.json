@@ -9,7 +9,9 @@
 	"scripts": {
 		"glue": "tsx tools/skill-glue/generate.ts",
 		"glue:check": "tsx tools/skill-glue/generate.ts --check",
+		"index": "tsx tools/index-generator/generate.ts",
 		"lint:vault": "tsx tools/vault-lint/lint.ts",
+		"sync": "tsx tools/sync-wrapper/sync.ts",
 		"test": "node --import tsx --test \"tools/**/*.test.ts\"",
 		"check": "biome check ."
 	},

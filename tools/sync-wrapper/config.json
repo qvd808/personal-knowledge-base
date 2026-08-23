@@ -1,0 +1,6 @@
+{
+	"obsidianExe": "%LOCALAPPDATA%\\Obsidian\\Obsidian.exe",
+	"vaultName": "knowledge",
+	"pollIntervalMs": 3000,
+	"lockWaitTimeoutMs": 60000
+}
