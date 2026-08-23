@@ -1,0 +1,7 @@
+- Need to store it on github or some place that offer free so we don't cost money
+- Need to be on obsidian because we can build the knowledge base up
+- A place to store skills or knowledge relate for an agent to interact
+- It should be optimize for human readable such that human can add any extension to make it easier to render for them, but agent could also easily search without wasting token
+- If possible we want when we write it locally, it can sync with github, but sending muliple sync is pretty curse so we shoudl consider architecture
+- I also want a way we can render it online for visualizaton both the graph and the readme content - maybe use github page cuz it only serve static
+- when I use agent down stream, I want agent to be able to query these thing, mostly IDE indenpendent meaning that neovim, or vs code or somehow I can call it within claude.com, chatGPT or GEMINI

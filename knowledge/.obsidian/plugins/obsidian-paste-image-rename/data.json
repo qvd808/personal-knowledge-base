@@ -1,0 +1,9 @@
+{
+  "imageNamePattern": "pasted-images-{{DATE:YYYYMMDDHHmmss}}",
+  "dupNumberAtStart": false,
+  "dupNumberDelimiter": "-",
+  "autoRename": true,
+  "handleAllAttachments": false,
+  "excludeExtensionPattern": "",
+  "disableRenameNotice": true
+}
