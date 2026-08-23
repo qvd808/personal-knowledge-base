@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
+import { parseSkillMd } from "../lib/frontmatter.ts";
 import { SkillGlueError } from "./errors.ts";
-import { parseSkillMd } from "./frontmatter.ts";
 
 export const STORE_DIR = ".agents/skills";
 export const GLUE_DIR = ".claude/skills";

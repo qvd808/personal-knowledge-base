@@ -1,12 +1,17 @@
-import { SkillGlueError } from "./errors.ts";
-
 /**
  * Minimal YAML-frontmatter parser covering the agentskills.io portable core
- * (#10): top-level keys, one-or-deeper nested maps (`metadata:`), folded (`>`)
- * and literal (`|`) block scalars, dash lists and flow lists (`allowed-tools`),
- * quoted/plain scalars, booleans and null. It is deliberately not a general
- * YAML parser; anything outside this subset is a parse error, not a guess.
+ * (#10) and the Vault note schema (#7): top-level keys, one-or-deeper nested
+ * maps (`metadata:`), folded (`>`) and literal (`|`) block scalars, dash lists
+ * and flow lists, quoted/plain scalars, booleans and null. It is deliberately
+ * not a general YAML parser; anything outside this subset is a parse error,
+ * not a guess.
  */
+
+/**
+ * Malformed frontmatter. Callers decide whether that is a hard error
+ * (skill-glue) or a rule violation (vault-lint).
+ */
+export class FrontmatterError extends Error {}
 
 export type YamlValue =
 	| string
@@ -14,6 +19,12 @@ export type YamlValue =
 	| null
 	| YamlValue[]
 	| { [key: string]: YamlValue };
+
+export interface ParsedFrontmatter {
+	fields: Record<string, YamlValue>;
+	/** Everything after the closing fence. */
+	body: string;
+}
 
 export interface SkillFrontmatter {
 	name: string;
@@ -41,7 +52,7 @@ function indentOf(line: string, filePath: string): number {
 	const match = /^ */.exec(line);
 	const indent = match?.[0].length ?? 0;
 	if (line[indent] === "\t") {
-		throw new SkillGlueError(
+		throw new FrontmatterError(
 			`${filePath}: tab indentation is not valid in frontmatter`,
 		);
 	}
@@ -82,7 +93,7 @@ function parseFlowList(raw: string, filePath: string): YamlValue[] {
 	return inner.split(",").map((item) => {
 		const value = parseScalar(item);
 		if (value === null || typeof value === "object") {
-			throw new SkillGlueError(
+			throw new FrontmatterError(
 				`${filePath}: unsupported flow-list item "${item.trim()}"`,
 			);
 		}
@@ -100,7 +111,7 @@ function parseBlockScalar(
 ): string {
 	const match = BLOCK_SCALAR.exec(indicator);
 	if (!match) {
-		throw new SkillGlueError(
+		throw new FrontmatterError(
 			`${filePath}: unsupported block scalar indicator "${indicator}"`,
 		);
 	}
@@ -159,13 +170,13 @@ function parseList(
 		if (lineIndent < indent) break;
 		const trimmed = line.slice(lineIndent);
 		if (lineIndent !== indent || !trimmed.startsWith("- ")) {
-			throw new SkillGlueError(
+			throw new FrontmatterError(
 				`${filePath}: unsupported nested list item "${trimmed}"`,
 			);
 		}
 		const value = parseScalar(trimmed.slice(2));
 		if (value === null || typeof value === "object") {
-			throw new SkillGlueError(
+			throw new FrontmatterError(
 				`${filePath}: unsupported list item "${trimmed}"`,
 			);
 		}
@@ -193,13 +204,13 @@ function parseMap(
 		const lineIndent = indentOf(line, filePath);
 		if (lineIndent < indent) break;
 		if (lineIndent > indent) {
-			throw new SkillGlueError(
+			throw new FrontmatterError(
 				`${filePath}: unexpected indentation in "${line.trim()}"`,
 			);
 		}
 		const match = KEY_LINE.exec(line.slice(lineIndent));
 		if (!match) {
-			throw new SkillGlueError(
+			throw new FrontmatterError(
 				`${filePath}: cannot parse frontmatter line "${line.trim()}"`,
 			);
 		}
@@ -230,15 +241,18 @@ function parseMap(
 	return map;
 }
 
-export function parseSkillMd(
+/**
+ * Parses the frontmatter block of any Markdown file. Returns null when the
+ * file has no frontmatter at all; throws FrontmatterError when a block is
+ * present but malformed.
+ */
+export function parseFrontmatter(
 	source: string,
 	filePath: string,
-): SkillFrontmatter {
+): ParsedFrontmatter | null {
 	const lines = source.replace(/\r\n/g, "\n").split("\n");
 	if (lines[0] !== FENCE) {
-		throw new SkillGlueError(
-			`${filePath}: SKILL.md must start with a --- frontmatter fence`,
-		);
+		return null;
 	}
 	let end = -1;
 	for (let i = 1; i < lines.length; i++) {
@@ -248,22 +262,36 @@ export function parseSkillMd(
 		}
 	}
 	if (end === -1) {
-		throw new SkillGlueError(
+		throw new FrontmatterError(
 			`${filePath}: missing closing --- frontmatter fence`,
 		);
 	}
 	const cursor: Cursor = { lines: lines.slice(1, end), i: 0 };
 	const fields = parseMap(cursor, 0, filePath);
+	return { fields, body: lines.slice(end + 1).join("\n") };
+}
+
+export function parseSkillMd(
+	source: string,
+	filePath: string,
+): SkillFrontmatter {
+	const parsed = parseFrontmatter(source, filePath);
+	if (parsed === null) {
+		throw new FrontmatterError(
+			`${filePath}: SKILL.md must start with a --- frontmatter fence`,
+		);
+	}
+	const { fields } = parsed;
 
 	const name = fields.name;
 	if (typeof name !== "string" || name === "") {
-		throw new SkillGlueError(
+		throw new FrontmatterError(
 			`${filePath}: frontmatter requires a non-empty "name"`,
 		);
 	}
 	const description = fields.description;
 	if (typeof description !== "string" || description.trim() === "") {
-		throw new SkillGlueError(
+		throw new FrontmatterError(
 			`${filePath}: frontmatter requires a non-empty "description"`,
 		);
 	}

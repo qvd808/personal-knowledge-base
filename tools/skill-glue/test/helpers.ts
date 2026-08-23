@@ -1,32 +1,12 @@
-import fs from "node:fs";
-import os from "node:os";
-import path from "node:path";
+import { writeFile } from "../../lib/test/helpers.ts";
 
-export function makeTmpRoot(): string {
-	return fs.mkdtempSync(path.join(os.tmpdir(), "skill-glue-test-"));
-}
-
-export function cleanup(root: string): void {
-	fs.rmSync(root, { recursive: true, force: true });
-}
-
-export function writeFile(
-	root: string,
-	relative: string,
-	content: string,
-): void {
-	const absolute = path.join(root, relative);
-	fs.mkdirSync(path.dirname(absolute), { recursive: true });
-	fs.writeFileSync(absolute, content);
-}
-
-export function readFile(root: string, relative: string): string {
-	return fs.readFileSync(path.join(root, relative), "utf8");
-}
-
-export function exists(root: string, relative: string): boolean {
-	return fs.existsSync(path.join(root, relative));
-}
+export {
+	cleanup,
+	exists,
+	makeTmpRoot,
+	readFile,
+	writeFile,
+} from "../../lib/test/helpers.ts";
 
 export interface FixtureSkill {
 	description?: string;

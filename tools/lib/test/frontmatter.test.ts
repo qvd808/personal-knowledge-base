@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { parseSkillMd } from "../frontmatter.ts";
+import { parseFrontmatter, parseSkillMd } from "../frontmatter.ts";
 
 test("parses a minimal skill", () => {
 	const result = parseSkillMd(
@@ -97,5 +97,27 @@ test("rejects missing fences and missing required fields", () => {
 	assert.throws(
 		() => parseSkillMd("---\nname: a\ndescription: x\n", "SKILL.md"),
 		/closing/,
+	);
+});
+
+test("parseFrontmatter returns fields and body for any markdown file", () => {
+	const parsed = parseFrontmatter(
+		"---\ntags:\n  - test\ncreated: 2026-08-23\n---\n\nNote body.\n",
+		"note.md",
+	);
+	assert.deepEqual(parsed?.fields.tags, ["test"]);
+	assert.equal(parsed?.fields.created, "2026-08-23");
+	assert.equal(parsed?.body, "\nNote body.\n");
+});
+
+test("parseFrontmatter returns null without a fence and throws on malformed blocks", () => {
+	assert.equal(parseFrontmatter("No frontmatter.\n", "note.md"), null);
+	assert.throws(
+		() => parseFrontmatter("---\ntags: [a, b\n", "note.md"),
+		/closing/,
+	);
+	assert.throws(
+		() => parseFrontmatter("---\n\ttags: x\n---\n", "note.md"),
+		/tab indentation/,
 	);
 });

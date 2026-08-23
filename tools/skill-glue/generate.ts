@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
+import { FrontmatterError } from "../lib/frontmatter.ts";
 import { type Change, reconcile } from "./apply.ts";
 import { SkillGlueError } from "./errors.ts";
 import { AGENTS_MD, buildPlan } from "./plan.ts";
@@ -43,7 +44,7 @@ export function run(
 		}
 		return { ok: true, check, changes };
 	} catch (error) {
-		if (error instanceof SkillGlueError) {
+		if (error instanceof SkillGlueError || error instanceof FrontmatterError) {
 			return { ok: false, check, changes: [], error: error.message };
 		}
 		throw error;
