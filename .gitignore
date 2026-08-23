@@ -1,0 +1,14 @@
+# .obsidian/ hygiene (#16): workspace state and secrets stay local
+knowledge/.obsidian/workspace.json
+knowledge/.obsidian/workspace-mobile.json
+knowledge/.obsidian/workspaces.json
+knowledge/.obsidian/cache/
+# Plugin data.json is ignored by default; reviewed-clean files are whitelisted
+knowledge/.obsidian/plugins/*/data.json
+!knowledge/.obsidian/plugins/obsidian-paste-image-rename/data.json
+# Deferred secret-injection machinery (#16): values never committed
+secrets.json
+
+# tools/ toolchain (#17) and Quartz build output (#12)
+node_modules/
+public/
