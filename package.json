@@ -1,0 +1,21 @@
+{
+	"name": "personal-knowledge-base",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"engines": {
+		"node": ">=22"
+	},
+	"scripts": {
+		"glue": "tsx tools/skill-glue/generate.ts",
+		"glue:check": "tsx tools/skill-glue/generate.ts --check",
+		"test": "node --import tsx --test \"tools/**/*.test.ts\"",
+		"check": "biome check ."
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.5.10",
+		"@types/node": "^26.2.0",
+		"tsx": "^4.23.12",
+		"typescript": "^7.0.2"
+	}
+}
