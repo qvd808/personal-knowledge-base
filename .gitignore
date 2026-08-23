@@ -8,6 +8,8 @@ knowledge/.obsidian/plugins/*/data.json
 !knowledge/.obsidian/plugins/obsidian-paste-image-rename/data.json
 # Deferred secret-injection machinery (#16): values never committed
 secrets.json
+# Local read-only PAT for the MCP Worker secret (#30) — never committed
+.github-token.local
 
 # tools/ toolchain (#17) and Quartz build output (#12)
 node_modules/
