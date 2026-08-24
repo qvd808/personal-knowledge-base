@@ -3,6 +3,7 @@ import path from "node:path";
 
 export const IMAGES_DIR = "images";
 export const EXCALIDRAW_DIR = "Excalidraw";
+export const TEMPLATES_DIR = "templates";
 export const OBSIDIAN_DIR = ".obsidian";
 
 /**
@@ -25,7 +26,7 @@ export interface VaultFile {
 
 export interface Vault {
 	root: string;
-	/** Notes: .md files outside .obsidian/, images/, Excalidraw/ and dot-paths. */
+	/** Notes: .md files outside .obsidian/, images/, Excalidraw/, templates/ and dot-paths. */
 	notes: VaultFile[];
 	/** Excalidraw drawings: wikilink targets and kebab-checked, but not notes. */
 	drawings: VaultFile[];
@@ -69,8 +70,8 @@ function topDirOf(relativePath: string): string | undefined {
 
 /**
  * Reads the vault tree once and classifies every file per the #6/#7 layout:
- * notes live everywhere except the central images/ folder and the
- * Excalidraw/ plugin folder; dot-paths (`.trash/`, …) are not content.
+ * notes live everywhere except the central images/ folder, the Excalidraw/
+ * plugin folder, and templates/; dot-paths (`.trash/`, …) are not content.
  */
 export function scanVault(root: string): Vault {
 	const vault: Vault = {
@@ -120,6 +121,8 @@ export function scanVault(root: string): Vault {
 			} else {
 				vault.attachments.push(file);
 			}
+		} else if (topDir === TEMPLATES_DIR) {
+			// Template stubs for Obsidian's core Templates plugin — not vault notes.
 		} else if (isMarkdown) {
 			vault.notes.push(file);
 		} else {

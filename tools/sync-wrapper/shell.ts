@@ -94,6 +94,7 @@ export const realShell: Shell = {
  */
 export const STEP_SCRIPTS: Record<StepName, string> = {
 	glue: "tools/skill-glue/generate.ts",
+	fill: "tools/frontmatter-fill/fill.ts",
 	lint: "tools/vault-lint/lint.ts",
 	index: "tools/index-generator/generate.ts",
 };

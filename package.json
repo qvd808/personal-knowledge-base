@@ -11,6 +11,7 @@
 		"glue:check": "tsx tools/skill-glue/generate.ts --check",
 		"index": "tsx tools/index-generator/generate.ts",
 		"lint:vault": "tsx tools/vault-lint/lint.ts",
+		"fill:frontmatter": "tsx tools/frontmatter-fill/fill.ts",
 		"mcp:deploy": "wrangler deploy -c tools/mcp-server/wrangler.toml",
 		"sync": "tsx tools/sync-wrapper/sync.ts",
 		"test": "node --import tsx --test \"tools/**/*.test.ts\"",

@@ -15,7 +15,7 @@ case says otherwise.
 2. Edit a note, then close Obsidian (File → Exit).
 3. A modal "Sync notes to GitHub?" dialog appears. Click **Yes**.
 
-Expected: console shows glue → lint → index → `git add -A` → commit →
+Expected: console shows glue → fill → lint → index → `git add -A` → commit →
 `git pull --rebase` → `git push`; exit is clean; GitHub shows a commit like
 `sync(YYYY-MM-DD): 1 file changed`.
 

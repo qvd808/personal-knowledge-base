@@ -34,6 +34,7 @@ test("happy path: exit hint → verify → steps → prompt → git sequence", a
 		"tasklist:Obsidian.exe",
 		"step:glue",
 		"git:status --porcelain -- .claude/skills/ AGENTS.md",
+		"step:fill",
 		"step:lint",
 		"step:index",
 		"prompt",
@@ -340,6 +341,7 @@ test("a failing vault lint aborts before the index step", async (t) => {
 		"tasklist:Obsidian.exe",
 		"step:glue",
 		"git:status --porcelain -- .claude/skills/ AGENTS.md",
+		"step:fill",
 		"step:lint",
 		"notify",
 	]);

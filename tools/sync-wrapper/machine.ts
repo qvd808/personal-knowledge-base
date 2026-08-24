@@ -7,7 +7,7 @@ import type { Config } from "./config.ts";
  */
 
 /** The sync-time steps the wrapper spawns, in fixed order. */
-export type StepName = "glue" | "lint" | "index";
+export type StepName = "glue" | "fill" | "lint" | "index";
 
 export type Phase =
 	| "launch"
@@ -20,6 +20,7 @@ export type Phase =
 	| "unlock-remove"
 	| "glue"
 	| "glue-diff"
+	| "fill"
 	| "lint"
 	| "index"
 	| "prompt"
@@ -143,6 +144,8 @@ export function decide(state: State): Effect | "halt" {
 			return { kind: "run-step", step: "glue" };
 		case "glue-diff":
 			return { kind: "check-glue-diff" };
+		case "fill":
+			return { kind: "run-step", step: "fill" };
 		case "lint":
 			return { kind: "run-step", step: "lint" };
 		case "index":
@@ -278,6 +281,7 @@ export function apply(state: State, obs: Observation): void {
 				return;
 			}
 			if (obs.step === "glue") state.phase = "glue-diff";
+			else if (obs.step === "fill") state.phase = "lint";
 			else if (obs.step === "lint") state.phase = "index";
 			else state.phase = "prompt";
 			return;
@@ -298,7 +302,7 @@ export function apply(state: State, obs: Observation): void {
 				);
 				return;
 			}
-			state.phase = "lint";
+			state.phase = "fill";
 			return;
 		case "prompt-done": {
 			if (obs.result.error !== undefined || obs.result.code !== 0) {
@@ -474,6 +478,7 @@ function fail(
 
 function stepLabel(step: StepName): string {
 	if (step === "glue") return "Skill glue";
+	if (step === "fill") return "Frontmatter fill";
 	if (step === "lint") return "Vault lint";
 	return "Index generator";
 }
