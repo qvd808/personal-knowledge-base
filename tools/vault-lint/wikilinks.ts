@@ -1,4 +1,4 @@
-import type { Vault } from "./vault.ts";
+import type { Vault } from "../lib/vault.ts";
 
 export interface Wikilink {
 	target: string;

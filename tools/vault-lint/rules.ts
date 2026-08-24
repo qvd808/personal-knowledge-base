@@ -4,7 +4,7 @@ import {
 	parseFrontmatter,
 	type YamlValue,
 } from "../lib/frontmatter.ts";
-import type { Vault } from "./vault.ts";
+import type { Vault } from "../lib/vault.ts";
 import { buildLinkIndex, extractWikilinks } from "./wikilinks.ts";
 
 export type Rule = "frontmatter" | "kebab-case" | "wikilink" | "secrets";

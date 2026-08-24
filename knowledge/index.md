@@ -13,14 +13,17 @@ The canonical entry point to the Vault. Agents: start here, navigate by referenc
 - [[hardware-description-language-hdl]] — what HDLs are; VHDL vs Verilog vs SystemVerilog
 - [[resources]] — curated external links
 
+<!-- BEGIN GENERATED -->
+
 ## All notes
 
-- [[apio]] — APIO CLI command reference (build, verify, sim, upload)
-- [[computer-architecture]] — program counter walkthrough (Nand2Tetris)
-- [[electronic]] — diodes; Karnaugh maps: SOP/POS grouping, XOR parity, Kmap→mux
-- [[field-programmable-gate-arrays-fpgas]] — FPGA fundamentals and design flow
-- [[finite-state-machine]] — Moore vs Mealy; HDLBits FSM walkthroughs
-- [[hardware-description-language-hdl]] — HDL concepts and history
-- [[resources]] — external resource links (FPGA intro, Verilog course)
-- [[verilog]] — Verilog reference: data types, assignments, description levels, sequential design
-- [[simple-state-machine]] — Excalidraw: simple FSM diagram
+- [[apio]] — #apio #cli #fpga — 2026-08-23
+- [[computer-architecture]] — #computer-architecture #nand2tetris — 2026-08-23
+- [[electronic]] — #electronics #karnaugh-map #verilog — 2026-08-23
+- [[field-programmable-gate-arrays-fpgas]] — #fpga #hdl #toolchain — 2026-08-23
+- [[finite-state-machine]] — #fsm #hdl #verilog — 2026-08-23
+- [[hardware-description-language-hdl]] — #hdl #verilog #vhdl — 2026-08-23
+- [[resources]] — #fpga #resources #verilog — 2026-08-23
+- [[verilog]] — #hdl #verilog — 2026-08-23
+
+<!-- END GENERATED -->
