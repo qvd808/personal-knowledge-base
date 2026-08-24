@@ -32,7 +32,15 @@ One `## <tag>` heading in `resources.md` per tag in the union of all contributin
 
 ## Change review
 
-The diff-gated pass over recently changed vault notes: detect which files and hunks changed, then check them for misspellings and wrong words. Reports findings; never blocks a push and never edits bodies.
+The diff-gated pass over recently changed vault notes: detect which notes changed since the last sync, then check only the lines this sync added for wrong words. Untouched lines are never re-reported. Reports findings; never blocks a push and never edits bodies.
+
+## Swap pair
+
+One wrong→right word pair the change review detects: the wrong form appearing in checked prose becomes a Finding. Matched as a whole word, case-insensitively.
+
+## Wordlist
+
+The change review's exemption vocabulary: words that are never suspicious, together with its swap pairs. Grows by direct edit.
 
 ## Finding
 
