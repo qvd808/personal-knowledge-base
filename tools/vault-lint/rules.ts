@@ -190,11 +190,14 @@ const SECRET_KEY =
 /**
  * The #16 backstop: no token- or credential-looking values in committable
  * `.obsidian/` config. Workspace state and caches are excluded by scanVault;
- * secrets belong in Secret Storage or a gitignored data.json.
+ * secrets belong in Secret Storage or a gitignored data.json. Only JSON config
+ * is scanned — third-party plugin code (main.js, styles.css) is public release
+ * artifacts and false-positives on minified identifiers.
  */
 export function checkSecrets(vault: Vault): Violation[] {
 	const violations: Violation[] = [];
 	for (const config of vault.obsidianConfigs) {
+		if (!config.relativePath.endsWith(".json")) continue;
 		const source = fs.readFileSync(config.absolutePath, "utf8");
 		const lines = source.split("\n");
 		for (let i = 0; i < lines.length; i++) {

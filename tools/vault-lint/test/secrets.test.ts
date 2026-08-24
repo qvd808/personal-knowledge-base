@@ -91,6 +91,22 @@ test("short or placeholder values under secret-ish keys pass", (t) => {
 	assert.equal(result.ok, true);
 });
 
+test("third-party plugin code is not config and is never scanned", (t) => {
+	const root = makeTmpRoot();
+	t.after(() => cleanup(root));
+	writeFile(root, "some-note.md", validNote());
+	writeFile(
+		root,
+		".obsidian/plugins/some-plugin/main.js",
+		'const AI_PROVIDER_API_KEY_SET = "sk-abcdefghij1234567890abcdefghij";\n',
+	);
+
+	const result = run(root);
+
+	assert.equal(result.ok, true);
+	assert.deepEqual(result.violations, []);
+});
+
 test("workspace state and cache are never scanned", (t) => {
 	const root = makeTmpRoot();
 	t.after(() => cleanup(root));
