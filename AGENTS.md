@@ -16,3 +16,24 @@ Generated from `.agents/skills/` by `npm run glue`; do not edit by hand.
 - **wayfinder** — Plan a huge chunk of work (more than one agent session can hold) as a shared map of decision tickets on your issue tracker, and resolve them one at a time until the way to the destination is clear.
 
 <!-- END GENERATED skill-glue -->
+
+## MCP server
+
+`tools/mcp-server/` serves the vault to agents outside this repo as three tools —
+`get_index`, `search_vault`, `read_file` — over a stateless adapter on GitHub's APIs
+(#13; no local clone needed). Every response opens with a `source: <repo-relative
+path>` header; cite that path and quote the passage in every answer.
+
+Local (stdio) entry, for MCP client configs — the absolute path is required:
+
+```json
+{
+	"command": "npx",
+	"args": ["tsx", "<absolute-path-to-repo>/tools/mcp-server/stdio.ts"],
+	"env": { "GITHUB_TOKEN": "<read-only GitHub PAT>" }
+}
+```
+
+Hosted (Streamable HTTP) entry: the `pkb-mcp` Cloudflare Worker at `/mcp`, deployed
+with `npm run mcp:deploy` (no-auth endpoint; the PAT lives server-side as a Worker
+secret).

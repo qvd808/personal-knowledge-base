@@ -11,6 +11,7 @@
 		"glue:check": "tsx tools/skill-glue/generate.ts --check",
 		"index": "tsx tools/index-generator/generate.ts",
 		"lint:vault": "tsx tools/vault-lint/lint.ts",
+		"mcp:deploy": "wrangler deploy -c tools/mcp-server/wrangler.toml",
 		"sync": "tsx tools/sync-wrapper/sync.ts",
 		"test": "node --import tsx --test \"tools/**/*.test.ts\"",
 		"check": "biome check ."
@@ -19,6 +20,14 @@
 		"@biomejs/biome": "^2.5.10",
 		"@types/node": "^26.2.0",
 		"tsx": "^4.23.12",
-		"typescript": "^7.0.2"
+		"typescript": "^7.0.2",
+		"wrangler": "^4.125.0"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/client": "^2.0.0",
+		"@modelcontextprotocol/sdk": "^1.30.0",
+		"@modelcontextprotocol/server": "^2.0.0",
+		"agents": "^0.21.0",
+		"zod": "^4.4.3"
 	}
 }

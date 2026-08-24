@@ -1,0 +1,9 @@
+#:schema ../../node_modules/wrangler/config-schema.json
+
+# pkb-mcp: the hosted MCP transport (#13/#30). Deploy from the repo root with
+# `npm run mcp:deploy`; the read-only PAT is set once out-of-band with
+# `wrangler secret put GITHUB_TOKEN -c tools/mcp-server/wrangler.toml`.
+name = "pkb-mcp"
+main = "worker.ts"
+compatibility_date = "2026-08-01"
+compatibility_flags = ["nodejs_compat"]
