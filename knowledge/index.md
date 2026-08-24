@@ -19,9 +19,11 @@ The canonical entry point to the Vault. Agents: start here, navigate by referenc
 
 - [[apio]] — #apio #cli #fpga — 2026-08-23
 - [[computer-architecture]] — #computer-architecture #nand2tetris — 2026-08-23
+- [[coq]] — #coq #formal-verification — 2026-08-23
 - [[electronic]] — #electronics #karnaugh-map #verilog — 2026-08-23
 - [[field-programmable-gate-arrays-fpgas]] — #fpga #hdl #toolchain — 2026-08-23
 - [[finite-state-machine]] — #fsm #hdl #verilog — 2026-08-23
+- [[formal-verification]] — #formal-verification — 2026-08-23
 - [[hardware-description-language-hdl]] — #hdl #verilog #vhdl — 2026-08-23
 - [[resources]] — #fpga #resources #verilog — 2026-08-23
 - [[verilog]] — #hdl #verilog — 2026-08-23
