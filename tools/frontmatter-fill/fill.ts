@@ -112,7 +112,10 @@ export function fillFrontmatter(vaultRoot: string): FillResult {
 			changed = true;
 		}
 		if (!changed) continue;
-		fs.writeFileSync(note.absolutePath, renderFrontmatter(fields) + parsed.body);
+		fs.writeFileSync(
+			note.absolutePath,
+			renderFrontmatter(fields) + parsed.body,
+		);
 		filled.push(note.relativePath);
 	}
 	return { filled };

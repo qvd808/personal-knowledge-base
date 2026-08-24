@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { test } from "node:test";
-import { fillFrontmatter, renderFrontmatter } from "../fill.ts";
 import { cleanup, makeTmpRoot, writeFile } from "../../lib/test/helpers.ts";
+import { fillFrontmatter, renderFrontmatter } from "../fill.ts";
 
 test("prepends frontmatter when a note has none", (t) => {
 	const root = makeTmpRoot();
@@ -15,18 +15,14 @@ test("prepends frontmatter when a note has none", (t) => {
 
 	assert.deepEqual(filled, ["coq.md"]);
 	const source = fs.readFileSync(`${root}/coq.md`, "utf8");
-	assert.match(source, /^---\ntags:\n  - coq\ncreated: 2026-08-23\n---\n/);
+	assert.match(source, /^---\ntags:\n {2}- coq\ncreated: 2026-08-23\n---\n/);
 	assert.match(source, /formal verification/);
 });
 
 test("adds missing fields without dropping existing frontmatter", (t) => {
 	const root = makeTmpRoot();
 	t.after(() => cleanup(root));
-	writeFile(
-		root,
-		"note.md",
-		"---\ndraft: true\n---\n\nBody.\n",
-	);
+	writeFile(root, "note.md", "---\ndraft: true\n---\n\nBody.\n");
 	const mtime = new Date("2026-08-20T08:00:00");
 	fs.utimesSync(`${root}/note.md`, mtime, mtime);
 
@@ -34,7 +30,7 @@ test("adds missing fields without dropping existing frontmatter", (t) => {
 
 	assert.deepEqual(filled, ["note.md"]);
 	const source = fs.readFileSync(`${root}/note.md`, "utf8");
-	assert.match(source, /tags:\n  - note/);
+	assert.match(source, /tags:\n {2}- note/);
 	assert.match(source, /created: 2026-08-20/);
 	assert.match(source, /draft: true/);
 	assert.match(source, /Body\./);
