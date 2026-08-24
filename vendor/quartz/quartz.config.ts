@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Quartz 4",
+    pageTitle: "personal-knowledge-base",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
@@ -16,8 +16,8 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "quartz.jzhao.xyz",
-    ignorePatterns: ["private", "templates", ".obsidian"],
+    baseUrl: "qvd808.github.io/personal-knowledge-base",
+    ignorePatterns: ["private", "templates", ".obsidian", "Excalidraw"],
     defaultDateType: "modified",
     theme: {
       fontOrigin: "googleFonts",
