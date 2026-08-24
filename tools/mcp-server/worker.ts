@@ -1,10 +1,12 @@
 import { createMcpHandler } from "agents/mcp/server";
+import { handleAuthRequest, rejectInvalidBearer } from "./auth.ts";
 import { createGitHubClient } from "./github.ts";
 import { createServer } from "./server.ts";
 
-/** Worker secrets: GITHUB_TOKEN arrives via `wrangler secret put` (#13). */
+/** Worker secrets via `wrangler secret put`: GITHUB_TOKEN (#13), OAUTH_SIGNING_SECRET (#34). */
 interface Env {
 	GITHUB_TOKEN?: string;
+	OAUTH_SIGNING_SECRET?: string;
 }
 
 /**
@@ -18,16 +20,22 @@ interface ExecutionContextLike {
 }
 
 /**
- * Hosted transport (#13/#14): a no-auth Streamable HTTP endpoint (the data
- * is public by policy) at `/mcp`, stateless — one server instance per
- * request, built from the same factory as the stdio entry.
+ * Routing (#34): the OAuth shim owns the well-known paths, /authorize, and
+ * /token; everything else falls through to the hosted MCP transport
+ * (#13/#14) — a no-auth Streamable HTTP endpoint at `/mcp` (the data is
+ * public by policy), stateless, one server instance per request. A present
+ * Authorization header must hold a well-formed token, else 401.
  */
 export default {
-	fetch(
+	async fetch(
 		request: Request,
 		env: Env,
 		ctx: ExecutionContextLike,
 	): Promise<Response> {
+		const authResponse = await handleAuthRequest(request, env);
+		if (authResponse !== undefined) return authResponse;
+		const bearerRejection = await rejectInvalidBearer(request, env);
+		if (bearerRejection !== undefined) return bearerRejection;
 		const handler = createMcpHandler(() =>
 			createServer(createGitHubClient({ token: env.GITHUB_TOKEN })),
 		);
