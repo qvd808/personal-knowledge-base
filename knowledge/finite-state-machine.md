@@ -12,12 +12,13 @@ created: 2026-08-23
 
 ## Moore State Machine
 
-![[simple-state-machine]]
+![[simple-state-machine.png]]
 
 ## Mealy State Machine
 
 ## State machine question
 ![[fsm-question-1.png]]
+
 ![[fsm-question-2.png]]
 
 ```verilog
