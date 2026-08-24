@@ -1,0 +1,71 @@
+/* Base header styling with reduced line height and spacing */
+.mod-cm6 .cm-editor .HyperMD-header,
+.markdown-reading-view .markdown-preview-section :is(h1,h2,h3,h4,h5,h6) {
+    line-height: 1.2em !important;
+    margin: 4px 0px 2px 0px !important;
+    padding: 2px 0px 2px 0px !important;
+    font-weight: bold !important;
+}
+
+/* H1 - Large, bold, white */
+.markdown-reading-view h1,
+.mod-cm6 .cm-editor .HyperMD-header-1 {
+    font-size: 1.8em !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    border-bottom: 2px solid #ffffff !important;
+    padding-bottom: 4px !important;
+}
+
+/* H2 - Large, bold, warm orange */
+.markdown-reading-view h2,
+.mod-cm6 .cm-editor .HyperMD-header-2 {
+    font-size: 1.5em !important;
+    font-weight: 600 !important;
+    color: #ffab40 !important;
+    border-bottom: 1px solid #ffab40 !important;
+    padding-bottom: 2px !important;
+}
+
+/* H3 - Medium, bold, coral/salmon */
+.markdown-reading-view h3,
+.mod-cm6 .cm-editor .HyperMD-header-3 {
+    font-size: 1.3em !important;
+    font-weight: 600 !important;
+    color: #ff8a80 !important;
+}
+
+/* H4 - Medium-small, semi-bold, green */
+.markdown-reading-view h4,
+.mod-cm6 .cm-editor .HyperMD-header-4 {
+    font-size: 1.15em !important;
+    font-weight: 500 !important;
+    color: #81c784 !important;
+}
+
+/* H5 - Small, medium weight, light blue */
+.markdown-reading-view h5,
+.mod-cm6 .cm-editor .HyperMD-header-5 {
+    font-size: 1.05em !important;
+    font-weight: 500 !important;
+    color: #64b5f6 !important;
+}
+
+/* H6 - Smallest, normal weight, purple */
+.markdown-reading-view h6,
+.mod-cm6 .cm-editor .HyperMD-header-6 {
+    font-size: 1em !important;
+    font-weight: 400 !important;
+    color: #ba68c8 !important;
+    font-style: italic !important;
+}
+
+/* Reduce spacing after headers */
+.markdown-reading-view h1 + *,
+.markdown-reading-view h2 + *,
+.markdown-reading-view h3 + *,
+.markdown-reading-view h4 + *,
+.markdown-reading-view h5 + *,
+.markdown-reading-view h6 + * {
+    margin-top: 0.5em !important;
+}
