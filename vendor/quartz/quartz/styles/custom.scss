@@ -1,3 +1,78 @@
 @use "./base.scss";
 
-// put your custom CSS here!
+// Ported from the Obsidian snippet spacing-control.css so published pages match
+// the vault's reading view. Spacing and sizes apply to all themes; header colors
+// are dark-theme only (light mode keeps Quartz defaults). `.article-title` is the
+// note title (Obsidian's inline title), which the snippet intentionally leaves alone.
+
+article :is(h1, h2, h3, h4, h5, h6):not(.article-title) {
+  line-height: 1.2em !important;
+  margin: 4px 0 2px 0 !important;
+  padding: 2px 0 !important;
+  font-weight: bold !important;
+}
+
+article :is(h1, h2, h3, h4, h5, h6):not(.article-title) + * {
+  margin-top: 0.5em !important;
+}
+
+article h1:not(.article-title) {
+  font-size: 1.8em !important;
+  font-weight: 700 !important;
+}
+
+article h2 {
+  font-size: 1.5em !important;
+  font-weight: 600 !important;
+}
+
+article h3 {
+  font-size: 1.3em !important;
+  font-weight: 600 !important;
+}
+
+article h4 {
+  font-size: 1.15em !important;
+  font-weight: 500 !important;
+}
+
+article h5 {
+  font-size: 1.05em !important;
+  font-weight: 500 !important;
+}
+
+article h6 {
+  font-size: 1em !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+}
+
+:root[saved-theme="dark"] article {
+  h1:not(.article-title) {
+    color: #ffffff !important;
+    border-bottom: 2px solid #ffffff !important;
+    padding-bottom: 4px !important;
+  }
+
+  h2 {
+    color: #ffab40 !important;
+    border-bottom: 1px solid #ffab40 !important;
+    padding-bottom: 2px !important;
+  }
+
+  h3 {
+    color: #ff8a80 !important;
+  }
+
+  h4 {
+    color: #81c784 !important;
+  }
+
+  h5 {
+    color: #64b5f6 !important;
+  }
+
+  h6 {
+    color: #ba68c8 !important;
+  }
+}
