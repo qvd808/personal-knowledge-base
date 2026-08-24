@@ -27,8 +27,8 @@ so it works once this repo has a remote.
 
 `/wayfinder` plans a large, foggy chunk of work as a shared map of decision tickets on the
 issue tracker above, and resolves them one at a time. Its companion skills — `grilling`,
-`domain-modeling`, `prototype`, `research` — live under `.claude/skills/` and are invoked
-by the Skill tool.
+`domain-modeling`, `prototype`, `research` — live under `.agents/skills/` (the canonical
+store; `.claude/skills/` holds generated glue) and are invoked by the Skill tool.
 
 ## Modes
 
