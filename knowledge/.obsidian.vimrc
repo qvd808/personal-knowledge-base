@@ -1,6 +1,6 @@
-" Enforced vault navigation: Space+ff opens the quick switcher (Telescope-like).
-" Ctrl+O is unbound in .obsidian/hotkeys.json so this is the primary path.
-let mapleader = " "
+" Quick switcher ≈ Telescope ff. Ctrl+O is unbound in hotkeys.json.
+" Space must be unmapped first or Obsidian scrolls instead of chord (vimrc-support README).
+unmap <Space>
 
 exmap quickswitcher obcommand switcher:open
-nmap <leader>ff :quickswitcher<CR>
+nmap <Space>ff :quickswitcher<CR>
