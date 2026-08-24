@@ -1,0 +1,21 @@
+name: Close external pull requests
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  close:
+    if: github.event.pull_request.user.login != 'qvd808'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close pull request
+        run: |
+          gh pr close "${{ github.event.pull_request.number }}" \
+            --comment "This repository only accepts pull requests from the owner."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
