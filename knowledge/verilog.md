@@ -4,7 +4,7 @@ tags:
   - hdl
 created: 2026-08-23
 ---
-	- One of the most important aspect of Verilog is that it allows designers to simulate and verify their designs before implementation
+ One of the most important aspect of Verilog is that it allows designers to simulate and verify their designs before implementation
 
 ## Module
 
