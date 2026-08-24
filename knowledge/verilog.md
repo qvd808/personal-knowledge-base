@@ -736,3 +736,7 @@ module top_module (
 
 endmodule
 ```
+
+## Resources
+
+- [[resources#^res-59ffaaf2|Mastering Verilog in 1 hour]]

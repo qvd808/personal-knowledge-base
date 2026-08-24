@@ -12,7 +12,7 @@ The `## Resources` heading of a note. The only place harvesting looks. A link wr
 
 ## Harvesting
 
-The sync-time act of collecting Resources from note bodies via Patterns and rewriting them into Resource wikilinks. Membership is stateless: a raw URL and an existing Resource wikilink both count as present; deleting the line anywhere removes the Resource.
+The sync-time act of collecting Resources from note bodies via Patterns and rewriting them into Resource wikilinks. Membership is stateless: a raw URL and an existing Resource wikilink both count as present; deleting the line anywhere removes the Resource. The registry inside `resources.md` is the only memory: a Resource wikilink sustains its registry line even after the raw URL is gone from the note.
 
 ## Pattern
 
@@ -33,3 +33,11 @@ One `## <tag>` heading in `resources.md` per tag in the union of all contributin
 ## Change review
 
 The diff-gated pass over recently changed vault notes: detect which files and hunks changed, then check them for misspellings and wrong words. Reports findings; never blocks a push and never edits bodies.
+
+## Finding
+
+A vault-quality observation reported at sync time. Findings never block a push and never edit bodies.
+
+## Violation
+
+A vault-quality breach that fails the sync until fixed.

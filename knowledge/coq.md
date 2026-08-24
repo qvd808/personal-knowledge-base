@@ -46,4 +46,4 @@ Coq also provides a module system to aid in larger developments.
 
 ## Resources
 
-- [Software Foundations, Logical Foundations — Basics](https://softwarefoundations.cis.upenn.edu/lf-current/Basics.html)
+- [[resources#^res-db27fa43|Software Foundations, Logical Foundations — Basics]]

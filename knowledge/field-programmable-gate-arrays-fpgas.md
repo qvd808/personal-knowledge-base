@@ -31,7 +31,7 @@ Design Flow:
 - Package: icepack
 - Upload: iceprog
 
-We can use tool like [APIO](https://github.com/FPGAwars/apio) to call all of the above low level tools for us
+We can use tool like APIO to call all of the above low level tools for us
 
 Usually FPGA has an external SPI chip so it can flash to individual cells for configuration. Each time we boot it up, it has to read from the flash chip
 
@@ -40,8 +40,6 @@ Usually FPGA has an external SPI chip so it can flash to individual cells for co
 A way to increase the clock output of the FPGA
 
 ## Metastability
-
-[Experimenting with Metastability and Multiple Clocks on FPGAs](https://colinoflynn.com/2020/12/experimenting-with-metastability-and-multiple-clocks-on-fpgas/)
 
 A Metastability condition is when you try to sample a signal A from one clock domain to another with in the set up and hold up time of a signal. The signal within the hold up + set up time is undefined
 
@@ -53,8 +51,11 @@ Clock domain crossing is a chance of metastability happening when 2 clock domain
 
 ## FIFO
 
-FIFO as a queue can be a good ways to send message across asynchronized signal. Here is some tips on how to design a good FIFO: [FIFO's paper](https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqa2s2akpVOHVsWEFtYzVYUnZfbmhLWjdJLWc0Z3xBQ3Jtc0trVEZYV0NaSWxqQlRlQmxBbHlkR2Ewc0hfSDlSZWZNOVYwSU9qUHVBYTdIbzF0MHlTNjRldmx2SmgxcHFHMkVSVlBPQTNuSEkyMHFHQWtmWVd5WGhtYmdwY1N3cFRHMVhfeTlvQmVJZHNjWmJUUTRlVQ&q=http%3A%2F%2Fwww.sunburst-design.com%2Fpapers%2FCummingsSNUG2002SJ_FIFO1.pdf&v=dXU1py-Od1g)
+FIFO as a queue can be a good ways to send message across asynchronized signal. Here is some tips on how to design a good FIFO.
 
 ## Resources
 
-[[resources#Field-Programmable Gate Arrays (FPGAs) - Resources]]
+- [[resources#^res-9ce8f1e8|DigiKey - FPGA series introduction]]
+- [[resources#^res-28effa99|APIO]]
+- [[resources#^res-cbe39f8c|Experimenting with Metastability and Multiple Clocks on FPGAs]]
+- [[resources#^res-4e71506a|FIFO's paper]]
