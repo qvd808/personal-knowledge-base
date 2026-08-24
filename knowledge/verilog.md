@@ -512,6 +512,7 @@ endmodule
 #### Casez
 - Below is a priority encoder that's detect the first bit which is high in vector input. Casez works by treating every z character as any bit so it's easier instead of listing 256 case for 8 bit encoders
 - works similar to case. **Remember that 8'bzzzzzzz1 will not work in case and it will treat it as value with high impedance and not matching anything**
+
 ```verilog
   // synthesis verilog_input_version verilog_2001
 module top_module (
@@ -533,8 +534,7 @@ module top_module (
     end
 
 endmodule
-
-  ```
+```
 
 ### Comparison Summary
 
