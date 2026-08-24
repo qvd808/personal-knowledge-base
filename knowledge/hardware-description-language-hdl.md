@@ -43,7 +43,7 @@ Two most common language are VHDL and Verilog. These 2 are examples of Register 
 - Developed by the United States Department of Defense
 - Strongly-typed and more verbose
 
-### [[verilog]]
+### [[verilog|Verilog]]
 
 - Invented in 1984
 - Developed by Gateway Design Automation
