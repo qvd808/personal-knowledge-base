@@ -1,0 +1,8 @@
+# Telescope-style: Space f f → quick switcher (via Spacekeys "activate on space").
+items:
+  f:
+    description: Find
+    items:
+      f:
+        command: switcher:open
+        description: Quick switcher

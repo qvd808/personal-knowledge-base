@@ -1,0 +1,9 @@
+{
+  "keymapFile": {
+    "path": "spacekeys.yml",
+    "format": "auto",
+    "extend": false,
+    "autoReload": true
+  },
+  "activateOnSpace": "markdown_only"
+}

@@ -1,6 +1,3 @@
-" Quick switcher ≈ Telescope ff. Ctrl+O is unbound in hotkeys.json.
-" Space must be unmapped first or Obsidian scrolls instead of chord (vimrc-support README).
-unmap <Space>
-
-exmap quickswitcher obcommand switcher:open
-nmap <Space>ff :quickswitcher<CR>
+" Vimrc Support: custom normal-mode bindings live here.
+" Quick switcher (Space f f) is handled by the Spacekeys plugin + spacekeys.yml —
+" CodeMirror cannot bind <Space>ff reliably via vimrc (space scrolls instead).

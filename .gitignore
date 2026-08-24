@@ -6,6 +6,7 @@ knowledge/.obsidian/cache/
 # Plugin data.json is ignored by default; reviewed-clean files are whitelisted
 knowledge/.obsidian/plugins/*/data.json
 !knowledge/.obsidian/plugins/obsidian-paste-image-rename/data.json
+!knowledge/.obsidian/plugins/spacekeys/data.json
 # Deferred secret-injection machinery (#16): values never committed
 secrets.json
 # Local read-only PAT for the MCP Worker secret (#30) — never committed
