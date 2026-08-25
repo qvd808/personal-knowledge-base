@@ -44,7 +44,7 @@ Coq also provides a module system to aid in larger developments.
 
 The thing that checks a term against a claimed type. It takes a complete, fully explicit term and a claimed type and answers yes or no.
 
-The kernel is deliberately kept small so that we can completely trust it.
+The kernel is deliberately kept small so that we can completely trust it. 
 
 | A bug in…         | Worst case                                                                                                                      |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------- |
@@ -52,6 +52,11 @@ The kernel is deliberately kept small so that we can completely trust it.
 | the elaborator    | it fills in a hole wrongly. The resulting term does not type-check. The kernel rejects it. **No false theorem.**                |
 | the parser        | it misreads your input. You prove something, but not the thing you meant to state. **A real problem, but not a soundness bug.** |
 | **the kernel**    | it accepts a term that is not a proof. **A false theorem is now provable, and nothing catches it.**                             |
+Kernel bug is only bug that produces false theorem; tactic-only bug never gets a term with correct type through. 
+### Keeping the kernel minimal not small
+
+It not that we have to keep it small but more like we have to keep aggressive requirements and make it as miminal as possible. If the kernel only has 1000 lines of code but there is someone who can inject the definition then the kernel itself is useless. It must from a [TCB (Trusted Computing Base)](#^tcb) itself.
+^ct-tcb
 ## Core Language
 
 The core language is implemented in Calculus of Inductive Construction that the kernel can understand. Users write proof at the tactic engine level. Then these tactics are converted and translated to [proof term](#^proof-term) in this core language where the kernel will verify it.
@@ -62,6 +67,10 @@ The separation between Core Language (elaboration engine), tactics and the kerne
 
 [**Proof term**](#^ct-proof-term): A term of the Calculus of Inductive Constructions whose type corresponds to a theorem statement.
 ^proof-term
+
+[**Trusted Computing Base**](#^ct-tcb): All the component your system relies on when you running your systems.
+^tcb
+## Resources
 ## Resources
 
 - [[resources#^res-db27fa43|Software Foundations, Logical Foundations — Basics]]

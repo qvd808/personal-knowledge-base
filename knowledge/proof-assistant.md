@@ -1,3 +1,9 @@
+---
+tags:
+  - proof-assistant
+created: 2026-08-25
+---
+
 ## Introduction
 
 Proof Assistants are computer systems that allows a user to do mathematics on a computer, but not so much computing (numerical or symbolical) aspect of mathematics but the aspects of _proving_ and _defining_
