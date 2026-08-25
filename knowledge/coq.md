@@ -42,11 +42,22 @@ Definition negb (b : bool) : bool :=
 Coq also provides a module system to aid in larger developments.
 ## Kernel
 
-The thing that check a terms against a claimed type. It take a complete, fully explicit term and a claimed type and answer yes or no.
+The thing that checks a term against a claimed type. It takes a complete, fully explicit term and a claimed type and answers yes or no.
+
+The kernel is deliberately kept small so that we can completely trust it.
+
+| A bug in…         | Worst case                                                                                                                      |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| the tactic engine | it emits a term that does not type-check. The kernel rejects it. You see an error. **No false theorem.**                        |
+| the elaborator    | it fills in a hole wrongly. The resulting term does not type-check. The kernel rejects it. **No false theorem.**                |
+| the parser        | it misreads your input. You prove something, but not the thing you meant to state. **A real problem, but not a soundness bug.** |
+| **the kernel**    | it accepts a term that is not a proof. **A false theorem is now provable, and nothing catches it.**                             |
 ## Core Language
 
-The core language is implemented in Calculus of Inductive Construction that the kernel can understand. Users write proof at the tactic engine levels. Then these tactics are convert and translate to [proof term](#^proof-term) in this core language where the kernel will verified.
+The core language is implemented in Calculus of Inductive Construction that the kernel can understand. Users write proof at the tactic engine level. Then these tactics are converted and translated to [proof term](#^proof-term) in this core language where the kernel will verify it.
 ^ct-proof-term
+
+The separation between Core Language (elaboration engine), tactics and the kernel is because of de Bruijn criterion (keeping a small and well delimited trusted code base within a proof assistant)
 ## Definitions
 
 [**Proof term**](#^ct-proof-term): A term of the Calculus of Inductive Constructions whose type corresponds to a theorem statement.
