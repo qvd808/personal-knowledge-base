@@ -289,7 +289,7 @@ export function apply(state: State, obs: Observation): void {
 			if (state.gitState) state.gitState.indexLock = false;
 			state.phase = "glue";
 			return;
-		case "step-done":
+		case "step-done": {
 			if (obs.result.error !== undefined || obs.result.code !== 0) {
 				fail(state, `${stepLabel(obs.step)} failed`, detailOf(obs.result), 1);
 				return;
@@ -303,6 +303,7 @@ export function apply(state: State, obs: Observation): void {
 			const findingsCount = parseFindingsCount(obs.result.stdout);
 			if (findingsCount !== undefined) state.findingsCount = findingsCount;
 			return;
+		}
 		case "glue-diff":
 			if (obs.result.error !== undefined || obs.result.code !== 0) {
 				fail(state, "Couldn't verify skill glue", detailOf(obs.result), 1);

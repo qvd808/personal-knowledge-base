@@ -23,8 +23,5 @@
 		"copy /y *",
 		"del *"
 	],
-	"zoo-code.deniedCommands": [
-		"rm -rf *",
-		"Remove-Item -Recurse -Force *"
-	]
+	"zoo-code.deniedCommands": ["rm -rf *", "Remove-Item -Recurse -Force *"]
 }
