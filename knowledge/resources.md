@@ -11,16 +11,16 @@ created: 2026-08-23
 
 - [Software Foundations, Logical Foundations — Basics](https://softwarefoundations.cis.upenn.edu/lf-current/Basics.html)
 
+## formal-verification
+
+- [Software Foundations, Logical Foundations — Basics](https://softwarefoundations.cis.upenn.edu/lf-current/Basics.html)
+
 ## fpga
 
 - [APIO](https://github.com/FPGAwars/apio)
 - [DigiKey - FPGA series introduction](https://youtu.be/lLg1AgA2Xoo?si=3ubqs5FtNFWVPf73)
 - [Experimenting with Metastability and Multiple Clocks on FPGAs](https://colinoflynn.com/2020/12/experimenting-with-metastability-and-multiple-clocks-on-fpgas/)
 - [FIFO's paper](http://www.sunburst-design.com/papers/CummingsSNUG2002SJ_FIFO1.pdf)
-
-## formal-verification
-
-- [Software Foundations, Logical Foundations — Basics](https://softwarefoundations.cis.upenn.edu/lf-current/Basics.html)
 
 ## hdl
 

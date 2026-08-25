@@ -1,0 +1,30 @@
+{
+	// Zoo Code auto-approve helpers: commands matching an entry in
+	// zoo-code.allowedCommands run without per-command approval once
+	// "Execute commands" is enabled in the Auto-approve pane.
+	"zoo-code.allowedCommands": [
+		"npm run *",
+		"npm test",
+		"npm install",
+		"npx biome *",
+		"npx tsx *",
+		"node --import tsx *",
+		"node -v",
+		"git status*",
+		"git diff*",
+		"git log*",
+		"git add*",
+		"git commit*",
+		"git push",
+		"git pull*",
+		"gh issue *",
+		"gh api *",
+		"gh pr *",
+		"copy /y *",
+		"del *"
+	],
+	"zoo-code.deniedCommands": [
+		"rm -rf *",
+		"Remove-Item -Recurse -Force *"
+	]
+}

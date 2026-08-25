@@ -7,7 +7,13 @@ import type { Config } from "./config.ts";
  */
 
 /** The sync-time steps the wrapper spawns, in fixed order. */
-export type StepName = "glue" | "fill" | "lint" | "index";
+export type StepName =
+	| "glue"
+	| "fill"
+	| "harvest"
+	| "lint"
+	| "index"
+	| "review";
 
 export type Phase =
 	| "launch"
@@ -21,8 +27,10 @@ export type Phase =
 	| "glue"
 	| "glue-diff"
 	| "fill"
+	| "harvest"
 	| "lint"
 	| "index"
+	| "review"
 	| "prompt"
 	| "stage"
 	| "staged-list"
@@ -74,6 +82,8 @@ export interface State {
 	gitState?: GitState;
 	lockWaitMs: number;
 	staged: string[];
+	/** Findings reported by the change-review step, parsed from its stdout. */
+	findingsCount?: number;
 	pullFailure?: RunResult;
 	failure?: Failure;
 	haltCode?: number;
@@ -146,10 +156,14 @@ export function decide(state: State): Effect | "halt" {
 			return { kind: "check-glue-diff" };
 		case "fill":
 			return { kind: "run-step", step: "fill" };
+		case "harvest":
+			return { kind: "run-step", step: "harvest" };
 		case "lint":
 			return { kind: "run-step", step: "lint" };
 		case "index":
 			return { kind: "run-step", step: "index" };
+		case "review":
+			return { kind: "run-step", step: "review" };
 		case "prompt":
 			return {
 				kind: "prompt",
@@ -281,9 +295,13 @@ export function apply(state: State, obs: Observation): void {
 				return;
 			}
 			if (obs.step === "glue") state.phase = "glue-diff";
-			else if (obs.step === "fill") state.phase = "lint";
+			else if (obs.step === "fill") state.phase = "harvest";
+			else if (obs.step === "harvest") state.phase = "lint";
 			else if (obs.step === "lint") state.phase = "index";
+			else if (obs.step === "index") state.phase = "review";
 			else state.phase = "prompt";
+			const findingsCount = parseFindingsCount(obs.result.stdout);
+			if (findingsCount !== undefined) state.findingsCount = findingsCount;
 			return;
 		case "glue-diff":
 			if (obs.result.error !== undefined || obs.result.code !== 0) {
@@ -363,7 +381,7 @@ export function apply(state: State, obs: Observation): void {
 					if (!failed) {
 						state.phase = "done";
 						state.haltCode = 0;
-						state.haltMessage = "Sync complete.";
+						state.haltMessage = findingsMessage(state);
 						return;
 					}
 					if (isOfflineShaped(result.stderr + result.stdout)) {
@@ -479,8 +497,23 @@ function fail(
 function stepLabel(step: StepName): string {
 	if (step === "glue") return "Skill glue";
 	if (step === "fill") return "Frontmatter fill";
+	if (step === "harvest") return "Resource harvester";
 	if (step === "lint") return "Vault lint";
-	return "Index generator";
+	if (step === "index") return "Index generator";
+	return "Change review";
+}
+
+const FINDINGS_LINE = /change-review:\s*(\d+)\s+finding/;
+
+/** The review step's summary line rides the final halt message (#40 §6). */
+export function parseFindingsCount(stdout: string): number | undefined {
+	const match = FINDINGS_LINE.exec(stdout);
+	return match ? Number(match[1]) : undefined;
+}
+
+function findingsMessage(state: State): string {
+	const count = state.findingsCount ?? 0;
+	return count > 0 ? `Sync complete. ${count} finding(s).` : "Sync complete.";
 }
 
 function detailOf(result: RunResult): string {

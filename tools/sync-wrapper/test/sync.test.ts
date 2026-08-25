@@ -35,8 +35,10 @@ test("happy path: exit hint → verify → steps → prompt → git sequence", a
 		"step:glue",
 		"git:status --porcelain -- .claude/skills/ AGENTS.md",
 		"step:fill",
+		"step:harvest",
 		"step:lint",
 		"step:index",
+		"step:review",
 		"prompt",
 		"git:add -A",
 		"git:diff --cached --name-only",
@@ -342,11 +344,29 @@ test("a failing vault lint aborts before the index step", async (t) => {
 		"step:glue",
 		"git:status --porcelain -- .claude/skills/ AGENTS.md",
 		"step:fill",
+		"step:harvest",
 		"step:lint",
 		"notify",
 	]);
 	assert.equal(state.haltCode, 1);
 	assert.match(notifications(fake)[0] ?? "", /Vault lint failed/);
+});
+
+test("change-review findings ride the final halt message", async (t) => {
+	const root = makeTmpRoot();
+	t.after(() => cleanup(root));
+	const fake = new FakeShell();
+	fake.handler = baseHandler((_command, args) => {
+		if (args[2] === "tools/change-review/review.ts") {
+			return ok({ stdout: "change-review: 2 finding(s)" });
+		}
+		return undefined;
+	});
+
+	const state = await runFake(fake, root);
+
+	assert.equal(state.haltCode, 0);
+	assert.equal(state.haltMessage, "Sync complete. 2 finding(s).");
 });
 
 test("a failing index step aborts before the prompt", async (t) => {

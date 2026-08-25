@@ -30,6 +30,10 @@ The grep-friendly list at the bottom of `resources.md` holding one anchored line
 
 One `## <tag>` heading in `resources.md` per tag in the union of all contributing notes' tags. A Resource appears under every tag of its owning note; within one section, entries are unique by URL. Topic sections are plain views of the registry and carry no anchors.
 
+## Verification
+
+A manual agent session that checks notes against their Resources: fetch each source (transcripts for YouTube), judge fidelity per class, and report Findings. YouTube Resources sharing a video id are verified once. Runs outside the sync wrapper and never edits bodies.
+
 ## Change review
 
 The diff-gated pass over recently changed vault notes: detect which notes changed since the last sync, then check only the lines this sync added for wrong words. Untouched lines are never re-reported. Reports findings; never blocks a push and never edits bodies.

@@ -1,0 +1,7 @@
+# Change-review wordlist (#40) — one entry per line, `#` comments.
+# A line containing `->` is a swap pair (wrong->right); every other line is
+# an exempt word that is never suspicious. Sorted; grows by direct edit.
+
+udpate->update
+intergraded->integrated
+Galina->Gallina

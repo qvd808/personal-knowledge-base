@@ -12,6 +12,8 @@
 		"index": "tsx tools/index-generator/generate.ts",
 		"lint:vault": "tsx tools/vault-lint/lint.ts",
 		"fill:frontmatter": "tsx tools/frontmatter-fill/fill.ts",
+		"harvest": "tsx tools/resource-harvester/harvest.ts",
+		"review": "tsx tools/change-review/review.ts",
 		"mcp:deploy": "wrangler deploy -c tools/mcp-server/wrangler.toml",
 		"sync": "tsx tools/sync-wrapper/sync.ts",
 		"test": "node --import tsx --test \"tools/**/*.test.ts\"",
