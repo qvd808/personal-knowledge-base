@@ -2,7 +2,10 @@
 	// Zoo Code auto-approve helpers: commands matching an entry in
 	// zoo-code.allowedCommands run without per-command approval once
 	// "Execute commands" is enabled in the Auto-approve pane.
+	// "*" below allows every command; zoo-code.deniedCommands still blocks
+	// the blacklisted ones.
 	"zoo-code.allowedCommands": [
+		"*",
 		"npm run *",
 		"npm test",
 		"npm install",
