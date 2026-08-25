@@ -9,10 +9,12 @@ created: 2026-08-23
 
 ## coq
 
+- [Rocq Core Language Reference](https://rocq-prover.org/doc/master/refman/language/core/index.html)
 - [Software Foundations, Logical Foundations — Basics](https://softwarefoundations.cis.upenn.edu/lf-current/Basics.html)
 
 ## formal-verification
 
+- [Rocq Core Language Reference](https://rocq-prover.org/doc/master/refman/language/core/index.html)
 - [Software Foundations, Logical Foundations — Basics](https://softwarefoundations.cis.upenn.edu/lf-current/Basics.html)
 
 ## fpga
@@ -46,6 +48,7 @@ created: 2026-08-23
 - http://www.sunburst-design.com/papers/CummingsSNUG2002SJ_FIFO1.pdf ^res-4e71506a
 - https://colinoflynn.com/2020/12/experimenting-with-metastability-and-multiple-clocks-on-fpgas/ ^res-cbe39f8c
 - https://github.com/FPGAwars/apio ^res-28effa99
+- https://rocq-prover.org/doc/master/refman/language/core/index.html ^res-a11528be
 - https://softwarefoundations.cis.upenn.edu/lf-current/Basics.html ^res-db27fa43
 - https://www.youtube.com/watch?v=YUB-OyGr1oA&t ^res-59ffaaf2
 - https://youtu.be/lLg1AgA2Xoo?si=3ubqs5FtNFWVPf73 ^res-9ce8f1e8
