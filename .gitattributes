@@ -1,0 +1,13 @@
+# Line endings are LF in the index and LF in every working tree.
+#
+# Git for Windows ships core.autocrlf=true in its system gitconfig, which
+# checks these files out as CRLF. Biome formats to LF, so on Windows every
+# file then reads as a whole-file reformat and a real error drowns in the
+# noise. eol=lf overrides core.autocrlf whatever a given machine sets, so
+# local `npm run check` matches CI.
+#
+# It also keeps .sh hooks runnable: a CR on the shebang line is "bad
+# interpreter".
+#
+# text=auto still detects binary files (the PNGs) and leaves them untouched.
+* text=auto eol=lf
