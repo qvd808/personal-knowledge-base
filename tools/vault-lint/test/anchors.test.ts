@@ -9,7 +9,9 @@ test("a Markdown anchor link with a caret and no note is blocking", (t) => {
 	writeFile(
 		root,
 		"a.md",
-		validNote("See [proof term](#^proof-term) here.\n\nDefinition.\n^proof-term\n"),
+		validNote(
+			"See [proof term](#^proof-term) here.\n\nDefinition.\n^proof-term\n",
+		),
 	);
 
 	const result = run(root);
@@ -38,10 +40,7 @@ test("a same-note wikilink with a caret and no note is blocking too", (t) => {
 	assert.equal(result.ok, false);
 	assert.equal(result.violations.length, 1);
 	assert.equal(result.violations[0]?.rule, "block-anchor");
-	assert.match(
-		result.violations[0]?.message ?? "",
-		/\[\[a#\^tcb\|TCB\]\]/,
-	);
+	assert.match(result.violations[0]?.message ?? "", /\[\[a#\^tcb\|TCB\]\]/);
 });
 
 test("an unaliased caret wikilink is suggested without an alias", (t) => {
@@ -141,7 +140,9 @@ test("an inline trailing marker counts as a defined block", (t) => {
 	writeFile(
 		root,
 		"a.md",
-		validNote("See [[a#^ct-tcb|usage]].\n\nThe passage that uses it.\n^ct-tcb\n"),
+		validNote(
+			"See [[a#^ct-tcb|usage]].\n\nThe passage that uses it.\n^ct-tcb\n",
+		),
 	);
 
 	const result = run(root);
