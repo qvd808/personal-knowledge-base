@@ -138,4 +138,4 @@ If `P` is `T`, it evaluates to `A`. If `P` is `F`, it evaluates to `B`. The Bool
 ## Resources
 
 [[resources#^res-72f015c2|Introduction to Lambda Calculus]]
-[The Lambda Calculus (Stanford Encyclopedia of Philosophy)](https://plato.stanford.edu/entries/lambda-calculus/)
+[[resources#^res-2330a1ca|The Lambda Calculus (Stanford Encyclopedia of Philosophy)]]

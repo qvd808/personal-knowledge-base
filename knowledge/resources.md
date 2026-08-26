@@ -35,6 +35,7 @@ created: 2026-08-23
 ## lambda-calculus
 
 - [Introduction to Lambda Calculus](https://ftp.science.ru.nl/CSI/CompMath.Found/lambda.pdf)
+- [The Lambda Calculus (Stanford Encyclopedia of Philosophy)](https://plato.stanford.edu/entries/lambda-calculus/)
 
 ## proof-assistant
 
@@ -57,6 +58,7 @@ created: 2026-08-23
 - https://colinoflynn.com/2020/12/experimenting-with-metastability-and-multiple-clocks-on-fpgas/ ^res-cbe39f8c
 - https://ftp.science.ru.nl/CSI/CompMath.Found/lambda.pdf ^res-72f015c2
 - https://github.com/FPGAwars/apio ^res-28effa99
+- https://plato.stanford.edu/entries/lambda-calculus/ ^res-2330a1ca
 - https://rocq-prover.org/doc/master/refman/language/core/index.html ^res-a11528be
 - https://softwarefoundations.cis.upenn.edu/lf-current/Basics.html ^res-db27fa43
 - https://www.cs.ru.nl/~herman/PUBS/proofassistants.pdf ^res-60e162a6
