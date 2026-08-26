@@ -32,10 +32,13 @@ export interface Shell {
 
 export const realShell: Shell = {
 	launch(command, args) {
-		const child = spawn(command, args, {
-			stdio: "ignore",
-			windowsHide: true,
-		});
+		// No windowsHide here: libuv turns it into STARTUPINFO.wShowWindow =
+		// SW_HIDE, which hides the launched app's own window, not just a console.
+		// Obsidian then runs windowless and holds Electron's single-instance
+		// lock, so every later launch forwards its URI into a process with no
+		// window. run() below keeps windowsHide, where it does the right thing
+		// for the short-lived console tools.
+		const child = spawn(command, args, { stdio: "ignore" });
 		const exited = new Promise<ExitInfo>((resolve) => {
 			let settled = false;
 			child.once("exit", (code, signal) => {
