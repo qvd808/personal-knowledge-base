@@ -1,5 +1,9 @@
 # Telescope-style: Space f f → quick switcher (via Spacekeys "activate on space").
 items:
+  # Quoted because a bare `?` is YAML's complex-mapping-key indicator and fails to parse.
+  "?":
+    description: Keybindings cheat sheet
+    file: keybindings.md
   f:
     description: Find
     items:

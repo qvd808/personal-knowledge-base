@@ -75,4 +75,11 @@ article h6 {
   h6 {
     color: #ba68c8 !important;
   }
+
+  // Mirrors the Obsidian snippet inline-code.css: inline `…` spans take VS
+  // Code's Dark+ `markup.inline.raw` colour. `:not(pre) > code` leaves fenced
+  // code blocks to the syntax highlighter.
+  :not(pre) > code {
+    color: #ce9178 !important;
+  }
 }

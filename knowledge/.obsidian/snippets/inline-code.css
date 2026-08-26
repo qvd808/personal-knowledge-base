@@ -1,0 +1,28 @@
+/* Inline code (`…`) coloured to match VS Code's Dark+ rendering of a .md file,
+ * where the `markup.inline.raw` scope is #ce9178.
+ *
+ * Kept out of spacing-control.css because that file is strictly the heading
+ * port the published site mirrors, and out of math-sizing.css because this is
+ * not math. One concern per snippet, as those two files already do.
+ *
+ * Reading view and Live Preview need separate selectors. Reading view builds
+ * real <code> elements; Live Preview never produces the element and instead
+ * marks the span with CodeMirror's .cm-inline-code. `:not(pre) > code` keeps
+ * fenced code blocks untouched, so only the inline wrapper is recoloured.
+ *
+ * .cm-formatting-code is the backtick delimiter itself. It is coloured to
+ * match so the ticks do not read as punctuation in a different colour.
+ *
+ * Colour only: the background chip and padding that Obsidian's theme puts on
+ * inline code are left alone. VS Code's editor draws no background there, so
+ * add `background: transparent` to both rules for a literal match.
+ */
+
+.markdown-reading-view :not(pre) > code {
+    color: #ce9178 !important;
+}
+
+.mod-cm6 .cm-editor .cm-inline-code,
+.mod-cm6 .cm-editor .cm-inline-code.cm-formatting-code {
+    color: #ce9178 !important;
+}

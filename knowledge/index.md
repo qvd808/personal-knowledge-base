@@ -25,6 +25,7 @@ The canonical entry point to the Vault. Agents: start here, navigate by referenc
 - [[finite-state-machine]] — #fsm #hdl #verilog — 2026-08-23
 - [[formal-verification]] — #formal-verification — 2026-08-23
 - [[hardware-description-language-hdl]] — #hdl #verilog #vhdl — 2026-08-23
+- [[keybindings]] — #meta — 2026-08-26
 - [[lambda-calculus]] — #lambda-calculus — 2026-08-25
 - [[proof-assistant]] — #proof-assistant — 2026-08-25
 - [[resources]] — #fpga #resources #verilog — 2026-08-23

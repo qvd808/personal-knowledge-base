@@ -2,6 +2,7 @@
   "theme": "obsidian",
   "enabledCssSnippets": [
     "spacing-control",
-    "math-sizing"
+    "math-sizing",
+    "inline-code"
   ]
 }
