@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { resourceId } from "../ids.ts";
-import { isDefinition, parseDefinition, scanLine } from "../patterns.ts";
+import {
+	bulletiseResourceLink,
+	isDefinition,
+	parseDefinition,
+	scanLine,
+} from "../patterns.ts";
 
 const URL = "https://example.dev/guide";
 const WIKILINK = `[[resources#^${resourceId(URL)}|Guide]]`;
@@ -94,4 +99,40 @@ test("definitions are recognized in both angle-bracket and bare forms", () => {
 	assert.equal(isDefinition(`[guide]: ./relative.md`), false);
 	const parsed = parseDefinition(`  [Guide]: <${URL}>  `);
 	assert.deepEqual(parsed, { label: "guide", url: URL });
+});
+
+test("bullets a bare resource wikilink", () => {
+	assert.equal(
+		bulletiseResourceLink(
+			"[[resources#^res-72f015c2|Intro to Lambda Calculus]]",
+		),
+		"- [[resources#^res-72f015c2|Intro to Lambda Calculus]]",
+	);
+});
+
+test("bullets a bare wikilink that carries no alias", () => {
+	assert.equal(
+		bulletiseResourceLink("[[resources#^res-72f015c2]]"),
+		"- [[resources#^res-72f015c2]]",
+	);
+});
+
+test("leaves an already-bulleted link alone", () => {
+	const line = "- [[resources#^res-72f015c2|Intro to Lambda Calculus]]";
+	assert.equal(bulletiseResourceLink(line), line);
+});
+
+test("leaves prose that merely mentions a resource alone", () => {
+	const line = "See [[resources#^res-72f015c2|the paper]] for the proof.";
+	assert.equal(bulletiseResourceLink(line), line);
+});
+
+test("leaves a line carrying two wikilinks alone", () => {
+	const line =
+		"[[resources#^res-72f015c2|One]] [[resources#^res-2330a1ca|Two]]";
+	assert.equal(bulletiseResourceLink(line), line);
+});
+
+test("leaves a blank line alone", () => {
+	assert.equal(bulletiseResourceLink(""), "");
 });

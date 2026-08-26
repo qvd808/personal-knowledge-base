@@ -7,6 +7,7 @@ import { scanVault } from "../lib/vault.ts";
 import { ResourceHarvesterError } from "./errors.ts";
 import { resourceId } from "./ids.ts";
 import {
+	bulletiseResourceLink,
 	type Definition,
 	isDefinition,
 	parseDefinition,
@@ -168,7 +169,7 @@ function processSection(
 			sustained.push({ id, alias: scan.aliases.get(id) ?? "" });
 		}
 		for (const label of scan.usedLabels) usedLabels.add(label);
-		return scan.rewritten;
+		return bulletiseResourceLink(scan.rewritten);
 	});
 
 	const kept = output

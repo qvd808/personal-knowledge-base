@@ -26,4 +26,4 @@ How do we convince ourself that a checked proof is itself correct:
 ^a-proof
 ## Resources
 
-[[resources#^res-60e162a6|Proof Assistants: history, ideas and future by H. Geuvers]]
+- [[resources#^res-60e162a6|Proof Assistants: history, ideas and future by H. Geuvers]]

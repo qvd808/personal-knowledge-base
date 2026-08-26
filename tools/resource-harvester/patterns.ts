@@ -41,6 +41,25 @@ export interface LineScan {
 	rewritten: string;
 }
 
+/** A line whose entire content is one resource wikilink, carrying no bullet. */
+const BARE_RESOURCE_LINK =
+	/^\s*\[\[resources#\^res-[0-9a-f]{8}(?:\|[^\]]*)?\]\]\s*$/;
+
+/**
+ * Prefixes a bare resource wikilink with `- `, so a Resources section always
+ * renders as a list.
+ *
+ * Two adjacent link lines with no bullets are one paragraph in CommonMark, so
+ * Quartz joins them onto a single line while Obsidian, which breaks on every
+ * newline by default, shows them stacked. A list renders the same in both.
+ *
+ * Only a line that is *entirely* one wikilink is touched. Prose that happens
+ * to mention a resource keeps its shape, as does anything already bulleted.
+ */
+export function bulletiseResourceLink(line: string): string {
+	return BARE_RESOURCE_LINK.test(line) ? `- ${line.trim()}` : line;
+}
+
 export function isDefinition(line: string): boolean {
 	return REF_DEFINITION.test(line);
 }

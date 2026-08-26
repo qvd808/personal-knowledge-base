@@ -137,5 +137,5 @@ $$
 If `P` is `T`, it evaluates to `A`. If `P` is `F`, it evaluates to `B`. The Boolean is its own conditional statement. And in fact, when `P` reduces to `T`, `PAB` reduces to `TAB`, which is `(\x. \y. x) A B` and that reduces to `A`.
 ## Resources
 
-[[resources#^res-72f015c2|Introduction to Lambda Calculus]]
-[[resources#^res-2330a1ca|The Lambda Calculus (Stanford Encyclopedia of Philosophy)]]
+- [[resources#^res-72f015c2|Introduction to Lambda Calculus]]
+- [[resources#^res-2330a1ca|The Lambda Calculus (Stanford Encyclopedia of Philosophy)]]
