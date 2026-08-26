@@ -9,7 +9,7 @@ created: 2026-08-25
 Proof Assistants are computer systems that allows a user to do mathematics on a computer, but not so much computing (numerical or symbolical) aspect of mathematics but the aspects of _proving_ and _defining_
 
 If you think the theorem is correct there is not much used fore the proof assistant. Mostly, it got used in situation where the correctness of the proofs are intricate pieces of software that act in a physical environment or about a compiler that involves syntax of programming langauge that has many possible instructions.
-### Roles of [proof](#^a-proof)
+### Roles of [[proof-assistant#^a-proof|proof]]
 
 Usually a role of the proof is either:
 	- Convinces the reader that the statement is correct.
@@ -22,7 +22,8 @@ How do we convince ourself that a checked proof is itself correct:
 	- **De Bruijn criterion:** Some proof assistants create an "independently checkable proof object" while the user is interactively proving a theorem. The proof should be easily checkable by the user of the program. De Bruijn's Automath systems were the first to specifically focus on this aspect and therefore this property was coined "De Bruijn criterion". In this system, the proof objects are basically encodings of natural deduction derivations that can be checked by a type checking algorithm.
 ## Definitions
 
-[**A proof**](): The process of an instance of establishing the validity of a statement especially by derivation from other statements in accordance with principles of reasoning.
+**A proof**: The process of an instance of establishing the validity of a statement especially by derivation from other statements in accordance with principles of reasoning.
 ^a-proof
 ## Resources
-https://www.cs.ru.nl/~herman/PUBS/proofassistants.pdf
+
+[Proof Assistants: history, ideas and future by H. Geuvers](https://www.cs.ru.nl/~herman/PUBS/proofassistants.pdf)

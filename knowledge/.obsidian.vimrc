@@ -2,6 +2,11 @@
 " Quick switcher (Space f f) is handled by the Spacekeys plugin + spacekeys.yml —
 " CodeMirror cannot bind <Space>ff reliably via vimrc (space scrolls instead).
 
+" --- Clipboard -----------------------------------------------------------
+" Yank and put go through the system clipboard. The plugin treats
+" unnamedplus as an alias of unnamed; both mean the same thing here.
+set clipboard=unnamedplus
+
 " --- Wikilink navigation -------------------------------------------------
 " gd follows the link under the cursor; Ctrl+O walks back through history.
 " Ctrl+O is free because hotkeys.json clears Obsidian's default binding of it

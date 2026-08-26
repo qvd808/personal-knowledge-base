@@ -5,23 +5,40 @@ import { fileURLToPath } from "node:url";
 import { scanVault } from "../lib/vault.ts";
 import { VaultLintError } from "./errors.ts";
 import {
+	checkBlockAnchors,
+	checkBlockAnchorTargets,
 	checkFrontmatter,
 	checkKebabCase,
 	checkSecrets,
 	checkWikilinks,
+	type Finding,
 	type Violation,
 } from "./rules.ts";
 
 export interface LintResult {
 	ok: boolean;
 	violations: Violation[];
+	/** Report-only observations; they never affect `ok`. */
+	findings: Finding[];
 	error?: string;
+}
+
+function byPlace<T extends { file: string; rule: string; line?: number }>(
+	a: T,
+	b: T,
+): number {
+	return (
+		a.file.localeCompare(b.file) ||
+		(a.line ?? 0) - (b.line ?? 0) ||
+		a.rule.localeCompare(b.rule)
+	);
 }
 
 /**
  * Runs every rule against the vault at `vaultRoot`. Expected failures
  * (missing vault) come back as `ok: false` with a message; violations are
- * data. The caller decides the exit code.
+ * data. The caller decides the exit code. Findings ride alongside: they are
+ * reported but never fail the sync, so only violations move `ok`.
  */
 export function run(vaultRoot: string): LintResult {
 	try {
@@ -34,22 +51,22 @@ export function run(vaultRoot: string): LintResult {
 			...checkKebabCase(vault),
 			...checkWikilinks(vault),
 			...checkSecrets(vault),
-		].sort(
-			(a, b) =>
-				a.file.localeCompare(b.file) ||
-				(a.line ?? 0) - (b.line ?? 0) ||
-				a.rule.localeCompare(b.rule),
-		);
-		return { ok: violations.length === 0, violations };
+			...checkBlockAnchors(vault),
+		].sort(byPlace);
+		const findings = [...checkBlockAnchorTargets(vault)].sort(byPlace);
+		return { ok: violations.length === 0, violations, findings };
 	} catch (error) {
 		if (error instanceof VaultLintError) {
-			return { ok: false, violations: [], error: error.message };
+			return { ok: false, violations: [], findings: [], error: error.message };
 		}
 		throw error;
 	}
 }
 
-export function formatViolation(vaultRoot: string, v: Violation): string {
+export function formatViolation(
+	vaultRoot: string,
+	v: Violation | Finding,
+): string {
 	const root = vaultRoot.replace(/[\\/]+$/, "");
 	const where = v.line !== undefined ? `${v.file}:${v.line}` : v.file;
 	return `${root}/${where} [${v.rule}] ${v.message}`;
@@ -67,6 +84,12 @@ function main(argv: string[]): void {
 	const result = run(vaultRoot);
 	for (const v of result.violations) {
 		console.log(formatViolation(vaultRoot, v));
+	}
+	for (const f of result.findings) {
+		console.log(formatViolation(vaultRoot, f));
+	}
+	if (result.findings.length > 0) {
+		console.log(`vault-lint: ${result.findings.length} finding(s)`);
 	}
 	if (result.error !== undefined) {
 		console.error(`vault-lint: ${result.error}`);

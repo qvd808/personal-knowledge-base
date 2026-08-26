@@ -5,14 +5,36 @@ import {
 	type YamlValue,
 } from "../lib/frontmatter.ts";
 import type { Vault } from "../lib/vault.ts";
+import {
+	type BlockReference,
+	extractBlockIds,
+	extractBlockReferences,
+	suggestedSpelling,
+} from "./anchors.ts";
 import { buildLinkIndex, extractWikilinks } from "./wikilinks.ts";
 
-export type Rule = "frontmatter" | "kebab-case" | "wikilink" | "secrets";
+export type Rule =
+	| "frontmatter"
+	| "kebab-case"
+	| "wikilink"
+	| "secrets"
+	| "block-anchor";
 
 export interface Violation {
 	/** Vault-relative POSIX path. */
 	file: string;
 	rule: Rule;
+	message: string;
+	line?: number;
+}
+
+/** Rules reported at the findings tier: never blocking, never editing. */
+export type FindingRule = "block-anchor-target";
+
+export interface Finding {
+	/** Vault-relative POSIX path. */
+	file: string;
+	rule: FindingRule;
 	message: string;
 	line?: number;
 }
@@ -228,4 +250,74 @@ export function checkSecrets(vault: Vault): Violation[] {
 		}
 	}
 	return violations;
+}
+
+/** `a/b/note.md` -> `note`: the name a wikilink uses to reach the note. */
+function noteName(relativePath: string): string {
+	return relativePath
+		.slice(relativePath.lastIndexOf("/") + 1)
+		.replace(/\.md$/i, "");
+}
+
+/** Whether a block reference points back at the note that contains it. */
+function pointsAtOwnNote(ref: BlockReference, relativePath: string): boolean {
+	if (ref.note === null) return false;
+	const target = ref.note.replace(/\.md$/i, "").toLowerCase();
+	return (
+		target === noteName(relativePath).toLowerCase() ||
+		target === relativePath.replace(/\.md$/i, "").toLowerCase()
+	);
+}
+
+/**
+ * Every block reference must name a note (#46). Quartz strips the caret only
+ * on hrefs that do, so `[text](#^id)` and `[[#^id]]` both render as dead links
+ * on the published site. Blocking, not a finding: the output is broken with no
+ * judgment call to make. Heading anchors carry no caret and are untouched.
+ */
+export function checkBlockAnchors(vault: Vault): Violation[] {
+	const violations: Violation[] = [];
+	for (const note of vault.notes) {
+		const source = fs.readFileSync(note.absolutePath, "utf8");
+		const name = noteName(note.relativePath);
+		for (const ref of extractBlockReferences(source)) {
+			if (ref.note !== null) continue;
+			violations.push(
+				violation(
+					note.relativePath,
+					"block-anchor",
+					`block reference "#^${ref.id}" names no note, so Quartz keeps the caret and the link is dead on the site — write ${suggestedSpelling(name, ref)}`,
+					ref.line,
+				),
+			);
+		}
+	}
+	return violations;
+}
+
+/**
+ * A block reference back into its own note should point at a block that
+ * exists (#46). Reported as a finding: a missing marker is a broken link but
+ * a renamed one is usually mid-edit, and lint blocking on it would fight the
+ * writer. Cross-note references are out of scope here, so this never overlaps
+ * the registry rule for `[[resources#^res-...]]`.
+ */
+export function checkBlockAnchorTargets(vault: Vault): Finding[] {
+	const findings: Finding[] = [];
+	for (const note of vault.notes) {
+		const source = fs.readFileSync(note.absolutePath, "utf8");
+		const ids = extractBlockIds(source);
+		for (const ref of extractBlockReferences(source)) {
+			if (!pointsAtOwnNote(ref, note.relativePath)) continue;
+			if (ids.has(ref.id)) continue;
+			const finding: Finding = {
+				file: note.relativePath,
+				rule: "block-anchor-target",
+				message: `block reference "#^${ref.id}" points at no block in this note — no "^${ref.id}" marker found`,
+			};
+			if (ref.line !== undefined) finding.line = ref.line;
+			findings.push(finding);
+		}
+	}
+	return findings;
 }

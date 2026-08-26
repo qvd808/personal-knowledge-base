@@ -55,22 +55,21 @@ The kernel is deliberately kept small so that we can completely trust it.
 Kernel bug is only bug that produces false theorem; tactic-only bug never gets a term with correct type through. 
 ### Keeping the kernel minimal not small
 
-It not that we have to keep it small but more like we have to keep aggressive requirements and make it as miminal as possible. If the kernel only has 1000 lines of code but there is someone who can inject the definition then the kernel itself is useless. It must from a [TCB (Trusted Computing Base)](#^tcb) itself.
+It not that we have to keep it small but more like we have to keep aggressive requirements and make it as miminal as possible. If the kernel only has 1000 lines of code but there is someone who can inject the definition then the kernel itself is useless. It must from a [[coq#^tcb|TCB (Trusted Computing Base)]] itself.
 ^ct-tcb
 ## Core Language
 
-The core language is implemented in Calculus of Inductive Construction that the kernel can understand. Users write proof at the tactic engine level. Then these tactics are converted and translated to [proof term](#^proof-term) in this core language where the kernel will verify it.
+The core language is implemented in Calculus of Inductive Construction that the kernel can understand. Users write proof at the tactic engine level. Then these tactics are converted and translated to [[coq#^proof-term|proof term]] in this core language where the kernel will verify it.
 ^ct-proof-term
 
 The separation between Core Language (elaboration engine), tactics and the kernel is because of de Bruijn criterion (keeping a small and well delimited trusted code base within a proof assistant)
 ## Definitions
 
-[**Proof term**](#^ct-proof-term): A term of the Calculus of Inductive Constructions whose type corresponds to a theorem statement.
+**[[coq#^ct-proof-term|Proof term]]**: A term of the Calculus of Inductive Constructions whose type corresponds to a theorem statement.
 ^proof-term
 
-[**Trusted Computing Base**](#^ct-tcb): All the component your system relies on when you running your systems.
+**[[coq#^ct-tcb|Trusted Computing Base]]**: All the component your system relies on when you running your systems.
 ^tcb
-## Resources
 ## Resources
 
 - [[resources#^res-db27fa43|Software Foundations, Logical Foundations — Basics]]

@@ -53,3 +53,15 @@ A vault-quality observation reported at sync time. Findings never block a push a
 ## Violation
 
 A vault-quality breach that fails the sync until fixed.
+
+## Term anchor
+
+The block marker on a definition, `^<term>`, naming the block that defines a term. Prose links to it to send a reader to the definition.
+
+## Usage anchor
+
+The block marker on the prose that uses a term, `^ct-<term>`, paired with the Term anchor of the same term. The definition links back to it, so a term and the passage it serves each point at the other.
+
+## Block reference
+
+A link to a Term or Usage anchor. It always names its note — `[[note#^id|text]]` — because an anchor that names none renders dead on the published site.
