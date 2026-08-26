@@ -71,6 +71,9 @@ const config: QuartzConfig = {
       Plugin.TableOfContents(),
       Plugin.CrawlLinks({ markdownLinkResolution: "shortest" }),
       Plugin.Description(),
+      // Must precede Latex(): it normalises single-line `$$…$$` into the
+      // fenced form that remark-math needs to emit a display block.
+      Plugin.MathBlocks(),
       Plugin.Latex({ renderEngine: "katex" }),
     ],
     filters: [Plugin.RemoveDrafts()],

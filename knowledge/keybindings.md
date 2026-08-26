@@ -18,23 +18,23 @@ does not update it.
 Defined in `spacekeys.yml`. Pressing Space alone opens the which-key popup, so this table
 is a reference rather than the only way to discover them.
 
-| Keys | Action |
-|---|---|
-| `Space ?` | Open this note |
+| Keys        | Action         |
+| ----------- | -------------- |
+| `Space ?`   | Open this note |
 | `Space f f` | Quick switcher |
 
 ### Vimrc (normal and visual mode)
 
 Defined in `.obsidian.vimrc`. These never appear in any popup.
 
-| Keys | Mode | Action |
-|---|---|---|
-| `gd` | normal | Follow the wikilink under the cursor |
-| `Ctrl+O` | normal | Go back through history |
-| `gsi` | normal, visual | Wrap selection or word in `*italic*` |
-| `gsb` | normal, visual | Wrap selection or word in `**bold**` |
-| `gsc` | normal, visual | Wrap selection or word in `` `code` `` |
-| `gsw` | normal, visual | Wrap selection or word in double square brackets, making a wikilink |
+| Keys     | Mode           | Action                                                              |
+| -------- | -------------- | ------------------------------------------------------------------- |
+| `gd`     | normal         | Follow the wikilink under the cursor                                |
+| `Ctrl+O` | normal         | Go back through history                                             |
+| `gsi`    | normal, visual | Wrap selection or word in `*italic*`                                |
+| `gsb`    | normal, visual | Wrap selection or word in `**bold**`                                |
+| `gsc`    | normal, visual | Wrap selection or word in `` `code` ``                              |
+| `gsw`    | normal, visual | Wrap selection or word in double square brackets, making a wikilink |
 
 Yank and put go through the system clipboard (`set clipboard=unnamedplus`).
 
