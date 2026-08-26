@@ -1,6 +1,7 @@
 {
   "theme": "obsidian",
   "enabledCssSnippets": [
-    "spacing-control"
+    "spacing-control",
+    "math-sizing"
   ]
 }

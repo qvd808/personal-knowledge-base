@@ -1,0 +1,32 @@
+/* Math sizing for Obsidian's MathJax render.
+ *
+ * Kept separate from spacing-control.css on purpose: that file is a port of the
+ * heading rules the published site mirrors in vendor/quartz/quartz/styles/custom.scss,
+ * and math is deliberately sized only here. The site's KaTeX render is left alone,
+ * so `.katex` selectors have no counterpart in this file.
+ *
+ * Selectors target mjx-container by its own `display` attribute rather than the
+ * `.math-inline` / `.math-block` wrappers. Those wrappers are built by the remark
+ * plugin that renders Reading view, so Live Preview never produces them and a
+ * wrapper-based rule silently matches nothing there. The attribute is set by
+ * MathJax itself and holds in both views.
+ *
+ * Obsidian's own rule is `mjx-container[jax="CHTML"][display="true"]`, carrying
+ * `margin: 1em 0`. Two attributes outrank the one below, so `!important` is what
+ * makes these win — it is load-bearing, not decoration.
+ *
+ * That margin is also relative to the container's own font-size, so scaling it
+ * would grow the margins with it. Pinned in rem instead: root-relative, so the
+ * spacing does not move when the glyphs do.
+ */
+
+/* Display math ($$…$$) */
+mjx-container[display="true"] {
+    font-size: 1.3em !important;
+    margin: 1rem 0 !important;
+}
+
+/* Inline math ($…$) */
+mjx-container:not([display="true"]) {
+    font-size: 1.25em !important;
+}
