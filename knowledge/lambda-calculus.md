@@ -3,7 +3,6 @@ tags:
   - lambda-calculus
 created: 2026-08-25
 ---
-
 ## Introduction
 
 Introduced in the 1930s by Alonzo Church. It is equivalent to Turing machines, meaning that it can compute anything a modern computer can.
@@ -57,7 +56,7 @@ Abstraction is said to bind the free variable x in M. For expression like $$\lam
 $$yx(\lambda x.x)[x:=N] \equiv yN(\lambda x.x)$$
 In calculus there is a similar variable binding. In $\int_{a}^{b} f(x,y)\, dx$ the variable x is bound and y is free. It does not make sense to substitute 7 for x but substitution for y makes sense.
 
-For reasons of hygiene it will always be assumed that the bound variables that occur in a certain expression are different from the free one. This can be fulfilled by renaming bound variables. E.g. $\lambda x.x$ becomes $\lambda y.y$. Indeed, these expressions act the same way: $(\lambda x.x)a = a = (\lambda y.y)a$ and they denote the same intended algorithm. Therefore expressions that differ only in the names of bound variables are identified.
+For reasons of hygiene it will always be assumed that the bound variables that occur in a certain expression are different from the free ones. This can be fulfilled by renaming bound variables. E.g. $\lambda x.x$ becomes $\lambda y.y$. Indeed, these expressions act the same way: $(\lambda x.x)a = a = (\lambda y.y)a$ and they denote the same intended algorithm. Therefore expressions that differ only in the names of bound variables are identified.
 ### Functions of more arguments
 
 Functions of several arguments can be constructed by iteration of application. The idea is due to Schönfinkel (1924) but is often called currying, after H.B. Curry who introduced it independently. Intuitively, if f(x, y) depends on two arguments, one can define:
@@ -108,7 +107,14 @@ M, N \in \Lambda &\implies (MN) \in \Lambda \\
 M \in \Lambda, x \in V &\implies (\lambda xM) \in \Lambda \\
 \end{aligned}
 $$
-In BNF this is
+The same three rules, written as a formal grammar — according to Barendregt's own Def 2.1:
+$$
+\begin{aligned}
+\texttt{<variable>} &::= \texttt{v} \mid \texttt{<variable>}\,' \\
+\texttt{<}\lambda\texttt{-term>} &::= \texttt{<variable>} \mid \texttt{(<}\lambda\texttt{-term><}\lambda\texttt{-term>)} \mid \texttt{(}\lambda\texttt{<variable><}\lambda\texttt{-term>)}
+\end{aligned}
+$$
+Rojas gives an equivalent grammar for the same three rules, using a dot as the separator between a binder and its body instead of Barendregt's parentheses-only style:
 $$
 \begin{aligned}
 \texttt{<expression>}  &::= \texttt{<name>} \mid \texttt{<function>} \mid \texttt{<application>} \\
@@ -116,25 +122,101 @@ $$
 \texttt{<application>} &::= \texttt{<expression>}\texttt{<expression>}
 \end{aligned}
 $$
-In a way, the set V is the variable and the set $\Lambda$ is the set of valid $\lambda$-terms we can construct using the inductive rules above.
+(R. Rojas, *A Tutorial Introduction to the Lambda Calculus*, §1, arXiv:1503.09060v1)
+
+All three above — the inductive rules, Barendregt's grammar, Rojas's grammar — describe the same set $\Lambda$. From here on this note uses Rojas's dot notation, with one exception: the three examples right below are transcribed directly from Barendregt's own Def 2.2, so they keep his original parenthesized, dot-free style.
+
+In a way, the set V is the set of variables and the set $\Lambda$ is the set of valid $\lambda$-terms we can construct using the inductive rules above.
 
 More example:
 - $\text{v'}$ : A single variable from the set V. This is the 1st rule: $x \in V \implies x \in \Lambda$
 - $\text{v'v}$ : An application of a variable $\text{v'}$ being applied to variable $\text{v}$ as an argument (similar to $\text{f x}$ in Haskell). This use the 2nd rule which is $M, N \in \Lambda \implies (MN) \in \Lambda$
 - $(\lambda \text{v(v'v)})$ : A function that takes an input named $\text{v}$, and inside the function body, it applies $\text{v'}$ to $\text{v}$. This use the 3rd rule which is $M \in \Lambda, x \in V \implies (\lambda xM) \in \Lambda$
 
-Example for how to represent Boolean where "True" is the two-argument function that picks its first argument and "False" is where the same function picks the second argument. 
+Example for how to represent Boolean where "True" is the two-argument function that picks its first argument and "False" is where the same function picks the second argument.
 $$
 \begin{aligned}
 T &\equiv \lambda xy.x \\
 F &\equiv \lambda xy.y
 \end{aligned}
 $$
-Since Booleans are already function that choose between 2 things, an *if-then-else* statement doesn't need a special keywords. It just a function application
+Since Booleans are already function that choose between 2 things, an *if-then-else* statement doesn't need a special keyword. It's just a function application
 $$
 \text{if P then A else B} := PAB
 $$
-If `P` is `T`, it evaluates to `A`. If `P` is `F`, it evaluates to `B`. The Boolean is its own conditional statement. And in fact, when `P` reduces to `T`, `PAB` reduces to `TAB`, which is `(\x. \y. x) A B` and that reduces to `A`.
+If `P` is `T`, it evaluates to `A`. If `P` is `F`, it evaluates to `B`. The Boolean is its own conditional statement. And in fact, when `P` reduces to `T`, `PAB` reduces to `TAB`, which is $\textcolor{#ce9178}{\texttt{(}\lambda x.\ \lambda y.\ x\texttt{)}\ A\ B}$ and that reduces to `A`.
+
+A reminder that there is a difference between $\lambda xy. x$ (which is equivalent to $\lambda x. \lambda y. x$) compare to $\lambda x. yx$. The first one represents a 2 argument function, which is [[#Functions of more arguments|shorthand notation for nested argument]], while the second one is a single parameter where the output of the function is an application of y to x ( a function call y with parameter x). Below is even more of confused ways of reading but as long as you can distinguish the . where it signifies what the function output, it going to be okay:
+
+| Written                                                        | Means                                                                                       | Interpretation                                                                                                                              |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| $\textcolor{#ce9178}{\lambda x.\ f\ x\ y}$                     | $\textcolor{#ce9178}{\lambda x.\ \texttt{(}\texttt{(}f\ x\texttt{)}\ y\texttt{)}}$          | So the function with argument $x$, where the body is $\textcolor{#ce9178}{\texttt{(}\texttt{(}f\ x\texttt{)}\ y\texttt{)}}$                 |
+| $\textcolor{#ce9178}{\texttt{(}\lambda x.\ x\texttt{)}\ y\ z}$ | $\textcolor{#ce9178}{\texttt{(}\texttt{(}\lambda x.\ x\texttt{)}\ y\texttt{)}\ z}$          | An application: $(\lambda x.\ x)$ applied to $y$ first, then that result applied to $z$                  |
+| $\textcolor{#ce9178}{\lambda x.\ \lambda y.\ x\ y}$            | $\textcolor{#ce9178}{\lambda x.\ \texttt{(}\lambda y.\ \texttt{(}x\ y\texttt{)}\texttt{)}}$ | A function with argument $x$ where it bodies is an application of a function with argument $y$ where the bodies is $x$ being applies to $y$ |
+For the above, we say that x is bound when it sits between $\textcolor{#ce9178}{\lambda}$ and  $\textcolor{#ce9178}{.}$
+It is also crucial that the x after the $\textcolor{#ce9178}{.}$ is independent from the x before it. A bound name is local and it has no meaning outside its binder, and does not communicate with the same-named variable elsewhere in the term. Similar to scoping rules in programming languages like Rust or Haskell.
+### Bound and free variables
+
+The other variables which are not bound is call free variables. The set of free variable is usually denoted FV(M)
+$$   
+\begin{aligned}
+\text{FV(x)} &= \{x\} \\
+\text{FV(M N)} &= \text{FV(M) } \cup \text{FV(N)} \\
+\text{FV(} \lambda \text{x.M)} &= \text{FV(M) } - \{x\} \\
+\end{aligned}
+$$
+There are three cases:
+- A bare variable is free in itself
+- An application binds nothing, so it just unions the 2 sides
+- An abstraction is the only case that remove anything $\lambda$x binds every free x in its body, so x leaves the set
+
+Some work through example below:
+$$
+\begin{aligned}
+\text{FV(} \lambda \text{x. x}) &= \text{FV(x) - \{x\}} \\
+&= \{x\} - \{x\} \\
+&= \emptyset
+\end{aligned}
+$$
+$$
+\begin{aligned}
+\text{FV(} \lambda \text{x. x y}) &= \text{FV(x y) - \{x\}} \\
+&= \text{(FV(x)} \cup \text{FV(y))} - \{x\} \\
+&= (\{x\} \cup \{y\}) - \{x\} \\
+&= \{y\}
+\end{aligned}
+$$
+$$
+\begin{aligned}
+\text{FV((} \lambda \text{x. x) x}) &= \text{FV(} \lambda \text{x. x)} \cup \text{FV(x)} \\
+&= \text{(FV(x)} - \{x\}) \cup \{x\} \\
+&= \emptyset \cup \{x\} \\
+&= \{x\}
+\end{aligned}
+$$
+### Scoping and shadow
+
+Let's look through this one, notice how the first $FV(\lambda x. x)$ refers to the body.
+$$
+\begin{aligned}
+\text{FV(} \lambda \text{x. } \lambda x. \text{ x}) &= \text{FV(} \lambda \text{x. x)} - \{x\} \\
+&= \text{(FV(x)} - \{x\}) - \{x\} \\
+&= (\{x\} - \{x\}) - \{x\} \\
+&= \emptyset - \{x\} \\
+&= \emptyset 
+\end{aligned}
+$$
+The final x belongs to the inner one and this is not a convention chosen for convenience. The set `{x}` is already emptied by the inner abstraction. By the time the outer abstraction's `- {x}` runs, there is nothing left for it to remove. The outer binder binds nothing at all. Compare to the below where, since there is no shadowing this time, it is the outer `x` that does the removing
+$$
+\begin{aligned}
+\text{FV(} \lambda \text{x. } \lambda y. \text{ x}) &= \text{FV(} \lambda \text{y. x)} - \{x\} \\
+&= \text{(FV(x)} - \{y\}) - \{x\} \\
+&= (\{x\} - \{y\}) - \{x\} \\
+&= \{x\} - \{x\} \\
+&= \emptyset 
+\end{aligned}
+$$
+From the 2 examples above, they are closed for different reasons where it depends on which binder captured the occurrence. The general rule, which follows from the definition being applied innermost-first: an occurrence belongs to the nearest enclosing binder of the same name. An outer binder of the same name is shadowed over that region and binds nothing here. This is the same rule as a shadowed `let` in Rust.
 ## Resources
 
 - [[resources#^res-72f015c2|Introduction to Lambda Calculus]]
