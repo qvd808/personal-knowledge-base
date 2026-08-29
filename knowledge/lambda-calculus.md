@@ -22,7 +22,6 @@ The reduction will continue until no rewrite can be applied, by which we mean we
 **Ex: (7 + 4) * (8 + 5 * 3) $\rightarrow$ 253**
 
 Reduction systems usually satisfy the Church-Rosser property, which states that the normal form obtained is independent of the order of evaluation of sub terms.
-
 ### Application and abstraction
 
 The first basic operation of the $\lambda$-calculus is application. The expression
@@ -33,7 +32,7 @@ denotes the data F as an algorithm applied to the data A as an input. This can b
 - The process of computation $FA$ (captured by conversion, and better still by reduction)
 - The output of this process (captured by the notion of models / semantics)
 
-This is type free (no typing discipline restricts what can be applied to what), which makes an expression like $FF$ — F applied to itself — allowed. This isn't itself a recursive definition; it's self-application, and it's what later gets used to *build* recursion (fixed-point combinators, not covered yet).
+This is type free (no typing discipline restricts what can be applied to what), which makes an expression like $FF$ — F applied to itself — allowed. This isn't itself a recursive definition; it's self-application, and it's what later gets used to *build* recursion (fixed-point combinators, not covered yet). 
 
 The second basic operation is abstraction. If $M \equiv M[x]$ is an expression depending on $x$, then $\lambda x. M[x]$ denotes the function $x \mapsto M[x]$.
 
@@ -41,13 +40,14 @@ Application and abstraction work together:
 
 $$(\lambda x. 2x + 1)\,3 = 2 \cdot 3 + 1 \;(=7)$$
 
-i.e. the function $x \mapsto 2x+1$ applied to $3$ gives $2\cdot3+1$. In general:
+i.e. the function $x \mapsto 2x+1$ applied to $3$ gives $2\cdot3+1$. In a way, 3 is the input we should put in x so every x inside the body is replace with 3. In general:
 
 $$(\lambda x. M[x])N = M[N]$$
 
 written preferably as
 
 $$(\lambda x. M)N = M[x := N] \qquad (\beta)$$
+^beta-axiom
 
 where $[x := N]$ is substitution of $N$ for $x$. This is the one rewrite rule of the lambda calculus — the reduction from the section above, made concrete for application and abstraction specifically.
 ### Free and bound variables
@@ -108,12 +108,10 @@ M \in \Lambda, x \in V &\implies (\lambda xM) \in \Lambda \\
 \end{aligned}
 $$
 The same three rules, written as a formal grammar — according to Barendregt's own Def 2.1:
-$$
-\begin{aligned}
+$$\begin{aligned}
 \texttt{<variable>} &::= \texttt{v} \mid \texttt{<variable>}\,' \\
 \texttt{<}\lambda\texttt{-term>} &::= \texttt{<variable>} \mid \texttt{(<}\lambda\texttt{-term><}\lambda\texttt{-term>)} \mid \texttt{(}\lambda\texttt{<variable><}\lambda\texttt{-term>)}
-\end{aligned}
-$$
+\end{aligned}$$
 Rojas gives an equivalent grammar for the same three rules, using a dot as the separator between a binder and its body instead of Barendregt's parentheses-only style:
 $$
 \begin{aligned}
@@ -151,7 +149,7 @@ A reminder that there is a difference between $\lambda xy. x$ (which is equivale
 | Written                                                        | Means                                                                                       | Interpretation                                                                                                                              |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | $\textcolor{#ce9178}{\lambda x.\ f\ x\ y}$                     | $\textcolor{#ce9178}{\lambda x.\ \texttt{(}\texttt{(}f\ x\texttt{)}\ y\texttt{)}}$          | So the function with argument $x$, where the body is $\textcolor{#ce9178}{\texttt{(}\texttt{(}f\ x\texttt{)}\ y\texttt{)}}$                 |
-| $\textcolor{#ce9178}{\texttt{(}\lambda x.\ x\texttt{)}\ y\ z}$ | $\textcolor{#ce9178}{\texttt{(}\texttt{(}\lambda x.\ x\texttt{)}\ y\texttt{)}\ z}$          | An application: $(\lambda x.\ x)$ applied to $y$ first, then that result applied to $z$                  |
+| $\textcolor{#ce9178}{\texttt{(}\lambda x.\ x\texttt{)}\ y\ z}$ | $\textcolor{#ce9178}{\texttt{(}\texttt{(}\lambda x.\ x\texttt{)}\ y\texttt{)}\ z}$          | An application: $(\lambda x.\ x)$ applied to $y$ first, then that result applied to $z$                                                     |
 | $\textcolor{#ce9178}{\lambda x.\ \lambda y.\ x\ y}$            | $\textcolor{#ce9178}{\lambda x.\ \texttt{(}\lambda y.\ \texttt{(}x\ y\texttt{)}\texttt{)}}$ | A function with argument $x$ where it bodies is an application of a function with argument $y$ where the bodies is $x$ being applies to $y$ |
 For the above, we say that x is bound when it sits between $\textcolor{#ce9178}{\lambda}$ and  $\textcolor{#ce9178}{.}$
 It is also crucial that the x after the $\textcolor{#ce9178}{.}$ is independent from the x before it. A bound name is local and it has no meaning outside its binder, and does not communicate with the same-named variable elsewhere in the term. Similar to scoping rules in programming languages like Rust or Haskell.
@@ -217,6 +215,37 @@ $$
 \end{aligned}
 $$
 From the 2 examples above, they are closed for different reasons where it depends on which binder captured the occurrence. The general rule, which follows from the definition being applied innermost-first: an occurrence belongs to the nearest enclosing binder of the same name. An outer binder of the same name is shadowed over that region and binds nothing here. This is the same rule as a shadowed `let` in Rust.
+
+### Alpha-equivalence
+
+Shadowing answers which binder wins *inside* one term. A bound name is just a pointer to its binder, and what matters is which binder it points at, not what the pointer is spelled. Because of that, 2 questions arise: when are two *different* terms actually the same term?
+
+Renaming a bound variable never changes which function a term denotes, so the following count as equivalent, written $M \equiv N$:
+$$
+\begin{aligned}
+(\lambda xy)z &\equiv (\lambda xy)z; \\
+(\lambda xx)z &\equiv (\lambda yy)z.
+\end{aligned}
+$$
+Rojas gives the same idea as a longer chain — rename the bound variable through several names in a row, still the same function:
+$$
+(\lambda z.z) \equiv (\lambda y.y) \equiv (\lambda t.t) \equiv (\lambda u.u)
+$$
+(Rojas, §1)
+
+But $\equiv$ is checked on shape, not on meaning, so it can fail even between terms that end up computing to the same thing:
+$$
+\begin{aligned}
+(\lambda xx)z &\not\equiv z; \\
+(\lambda xx)z &\not\equiv (\lambda xy)z.
+\end{aligned}
+$$
+(Barendregt & Barendsen, Convention 2.3(ii))
+
+> [!note] Where $=$ comes from
+> $(\lambda x. x)z \not\equiv z$ above, and yet $(\lambda x. x)z = z$ is also true — see the $(\beta)$ axiom under [[lambda-calculus#^beta-axiom|Application and abstraction]]: $(\lambda x. M)N = M[x := N]$.
+> $\textcolor{#ce9178}{\equiv}$ is syntactic: two terms are $\textcolor{#ce9178}{\equiv}$ if they're the same term, or become the same term by renaming a bound variable — checked on shape alone, before any reduction happens. $\textcolor{#ce9178}{=}$ is the equational theory built from $(\beta)$; it's what actually lets you rewrite $(\lambda x.x)z$ down to $z$. An application can never become $\textcolor{#ce9178}{\equiv}$ to a bare variable no matter how you rename its bound variables, because renaming can't change a term's shape from "application" to "variable" — only reduction ($\textcolor{#ce9178}{=}$) can get you from one to the other.
+
 ## Resources
 
 - [[resources#^res-72f015c2|Introduction to Lambda Calculus]]
