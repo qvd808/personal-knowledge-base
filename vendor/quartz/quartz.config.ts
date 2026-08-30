@@ -71,6 +71,11 @@ const config: QuartzConfig = {
       Plugin.TableOfContents(),
       Plugin.CrawlLinks({ markdownLinkResolution: "shortest" }),
       Plugin.Description(),
+      // Must precede MathBlocks(): it still needs to see the single-line
+      // `$$…$$` spelling. Wraps a display block carrying a `^block-id` anchor
+      // so the id survives KaTeX, which would otherwise rebuild the node it
+      // was put on and leave the link pointing at nothing.
+      Plugin.MathAnchors(),
       // Must precede Latex(): it normalises single-line `$$…$$` into the
       // fenced form that remark-math needs to emit a display block.
       Plugin.MathBlocks(),

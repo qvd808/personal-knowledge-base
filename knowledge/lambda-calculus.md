@@ -153,7 +153,9 @@ A reminder that there is a difference between $\lambda xy. x$ (which is equivale
 | $\textcolor{#ce9178}{\lambda x.\ f\ x\ y}$                     | $\textcolor{#ce9178}{\lambda x.\ \texttt{(}\texttt{(}f\ x\texttt{)}\ y\texttt{)}}$          | So the function with argument $x$, where the body is $\textcolor{#ce9178}{\texttt{(}\texttt{(}f\ x\texttt{)}\ y\texttt{)}}$                 |
 | $\textcolor{#ce9178}{\texttt{(}\lambda x.\ x\texttt{)}\ y\ z}$ | $\textcolor{#ce9178}{\texttt{(}\texttt{(}\lambda x.\ x\texttt{)}\ y\texttt{)}\ z}$          | An application: $(\lambda x.\ x)$ applied to $y$ first, then that result applied to $z$                                                     |
 | $\textcolor{#ce9178}{\lambda x.\ \lambda y.\ x\ y}$            | $\textcolor{#ce9178}{\lambda x.\ \texttt{(}\lambda y.\ \texttt{(}x\ y\texttt{)}\texttt{)}}$ | A function with argument $x$ where it bodies is an application of a function with argument $y$ where the bodies is $x$ being applies to $y$ |
+
 For the above, we say that x is bound when it sits between $\textcolor{#ce9178}{\lambda}$ and  $\textcolor{#ce9178}{.}$
+
 It is also crucial that the x after the $\textcolor{#ce9178}{.}$ is independent from the x before it. A bound name is local and it has no meaning outside its binder, and does not communicate with the same-named variable elsewhere in the term. Similar to scoping rules in programming languages like Rust or Haskell.
 ### Bound and free variables
 
