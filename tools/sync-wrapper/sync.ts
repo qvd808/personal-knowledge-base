@@ -20,6 +20,7 @@ import {
 	parseTasklist,
 	realShell,
 	type Shell,
+	STEP_ARGS,
 	STEP_SCRIPTS,
 	tasklistArgs,
 } from "./shell.ts";
@@ -93,10 +94,11 @@ export async function runWrapper(
 				return { kind: "lock-removed" };
 			case "run-step": {
 				const script = STEP_SCRIPTS[effect.step];
-				log(`sync: running ${script}`);
+				const extra = STEP_ARGS[effect.step] ?? [];
+				log(`sync: running ${[script, ...extra].join(" ")}`);
 				const result = await shell.run(
 					process.execPath,
-					["--import", "tsx", script],
+					["--import", "tsx", script, ...extra],
 					{ cwd: config.repoRoot },
 				);
 				return { kind: "step-done", step: effect.step, result };

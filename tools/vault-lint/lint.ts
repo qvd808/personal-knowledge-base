@@ -4,11 +4,13 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { scanVault } from "../lib/vault.ts";
 import { VaultLintError } from "./errors.ts";
+import { fixMath } from "./math.ts";
 import {
 	checkBlockAnchors,
 	checkBlockAnchorTargets,
 	checkFrontmatter,
 	checkKebabCase,
+	checkMathDelimiters,
 	checkSecrets,
 	checkWikilinks,
 	type Finding,
@@ -52,6 +54,7 @@ export function run(vaultRoot: string): LintResult {
 			...checkWikilinks(vault),
 			...checkSecrets(vault),
 			...checkBlockAnchors(vault),
+			...checkMathDelimiters(vault),
 		].sort(byPlace);
 		const findings = [...checkBlockAnchorTargets(vault)].sort(byPlace);
 		return { ok: violations.length === 0, violations, findings };
@@ -61,6 +64,32 @@ export function run(vaultRoot: string): LintResult {
 		}
 		throw error;
 	}
+}
+
+/**
+ * Rewrites every note whose math delimiters can be repaired mechanically, and
+ * returns the vault-relative paths that changed.
+ *
+ * This is the only rule with an autofix. The others need a human decision —
+ * which note a block reference meant, what a file should be renamed to — while
+ * these four have exactly one correct rewrite each, and leaving them to be
+ * fixed by hand means the site stays broken until someone notices.
+ *
+ * Notes are rewritten in place. The caller is expected to have the working
+ * tree under version control, which is how the rest of the toolchain treats
+ * the vault.
+ */
+export function fixVault(vaultRoot: string): string[] {
+	const vault = scanVault(vaultRoot);
+	const fixed: string[] = [];
+	for (const note of vault.notes) {
+		const source = fs.readFileSync(note.absolutePath, "utf8");
+		const repaired = fixMath(source);
+		if (repaired === source) continue;
+		fs.writeFileSync(note.absolutePath, repaired);
+		fixed.push(note.relativePath);
+	}
+	return fixed;
 }
 
 export function formatViolation(
@@ -75,12 +104,22 @@ export function formatViolation(
 function main(argv: string[]): void {
 	const flags = argv.filter((arg) => arg.startsWith("-"));
 	const positional = argv.filter((arg) => !arg.startsWith("-"));
-	if (flags.length > 0 || positional.length > 1) {
-		console.error("usage: tsx tools/vault-lint/lint.ts [vault-root]");
+	const unknown = flags.filter((flag) => flag !== "--fix");
+	if (unknown.length > 0 || positional.length > 1) {
+		console.error("usage: tsx tools/vault-lint/lint.ts [--fix] [vault-root]");
 		process.exitCode = 2;
 		return;
 	}
 	const vaultRoot = positional[0] ?? "knowledge";
+	// A missing vault is reported by `run` below, which already words it well;
+	// the fix pass just stays out of the way.
+	if (flags.includes("--fix") && fs.existsSync(vaultRoot)) {
+		const fixed = fixVault(vaultRoot);
+		for (const file of fixed) {
+			console.log(`vault-lint: fixed ${vaultRoot}/${file}`);
+		}
+		console.log(`vault-lint: fixed ${fixed.length} file(s)`);
+	}
 	const result = run(vaultRoot);
 	for (const v of result.violations) {
 		console.log(formatViolation(vaultRoot, v));

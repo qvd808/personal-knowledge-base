@@ -11,6 +11,7 @@ import {
 	extractBlockReferences,
 	suggestedSpelling,
 } from "./anchors.ts";
+import { findMathProblems } from "./math.ts";
 import { buildLinkIndex, extractWikilinks } from "./wikilinks.ts";
 
 export type Rule =
@@ -18,7 +19,8 @@ export type Rule =
 	| "kebab-case"
 	| "wikilink"
 	| "secrets"
-	| "block-anchor";
+	| "block-anchor"
+	| "math-delimiters";
 
 export interface Violation {
 	/** Vault-relative POSIX path. */
@@ -288,6 +290,29 @@ export function checkBlockAnchors(vault: Vault): Violation[] {
 					"block-anchor",
 					`block reference "#^${ref.id}" names no note, so Quartz keeps the caret and the link is dead on the site — write ${suggestedSpelling(name, ref)}`,
 					ref.line,
+				),
+			);
+		}
+	}
+	return violations;
+}
+
+/**
+ * Math that Obsidian renders but Quartz does not. Every form this reports has
+ * a mechanical rewrite, so `--fix` can clear all of them; see `math.ts` for
+ * what each one does to the built page.
+ */
+export function checkMathDelimiters(vault: Vault): Violation[] {
+	const violations: Violation[] = [];
+	for (const note of vault.notes) {
+		const source = fs.readFileSync(note.absolutePath, "utf8");
+		for (const found of findMathProblems(source)) {
+			violations.push(
+				violation(
+					note.relativePath,
+					"math-delimiters",
+					found.message,
+					found.line,
 				),
 			);
 		}

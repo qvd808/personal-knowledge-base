@@ -104,6 +104,17 @@ export const STEP_SCRIPTS: Record<StepName, string> = {
 	review: "tools/change-review/review.ts",
 };
 
+/**
+ * Extra arguments a step is run with. Only the lint step takes any: `--fix`
+ * repairs the math-delimiter forms that Obsidian renders and Quartz does not,
+ * so a note written in the editor cannot reach the site broken. The repair is
+ * mechanical and the step prints every file it rewrites; every other rule
+ * still fails the sync and waits for a human.
+ */
+export const STEP_ARGS: Partial<Record<StepName, string[]>> = {
+	lint: ["--fix"],
+};
+
 export function tasklistArgs(image: string): string[] {
 	return ["/FI", `IMAGENAME eq ${image}`, "/NH", "/FO", "CSV"];
 }

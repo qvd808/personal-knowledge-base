@@ -352,6 +352,20 @@ test("a failing vault lint aborts before the index step", async (t) => {
 	assert.match(notifications(fake)[0] ?? "", /Vault lint failed/);
 });
 
+test("the lint step is run with --fix so repairable math never reaches the site", async (t) => {
+	const root = makeTmpRoot();
+	t.after(() => cleanup(root));
+	const fake = new FakeShell();
+	fake.handler = baseHandler();
+
+	await runFake(fake, root);
+
+	const lint = fake.runs.find(
+		(run) => run.args[2] === "tools/vault-lint/lint.ts",
+	);
+	assert.deepEqual(lint?.args.slice(3), ["--fix"]);
+});
+
 test("change-review findings ride the final halt message", async (t) => {
 	const root = makeTmpRoot();
 	t.after(() => cleanup(root));

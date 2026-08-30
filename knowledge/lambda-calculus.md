@@ -52,7 +52,7 @@ $$(\lambda x. M)N = M[x := N] \qquad (\beta)$$
 where $[x := N]$ is substitution of $N$ for $x$. This is the one rewrite rule of the lambda calculus — the reduction from the section above, made concrete for application and abstraction specifically.
 ### Free and bound variables
 
-Abstraction is said to bind the free variable x in M. For expression like $$\lambda x.yx$$ we say that it has x as bound and y as free variable. Substitution $[x := N]$ is only performed in the free occurrences of x:
+Abstraction is said to bind the free variable x in M. For expression like $\lambda x.yx$ we say that it has x as bound and y as free variable. Substitution $[x := N]$ is only performed in the free occurrences of x:
 $$yx(\lambda x.x)[x:=N] \equiv yN(\lambda x.x)$$
 In calculus there is a similar variable binding. In $\int_{a}^{b} f(x,y)\, dx$ the variable x is bound and y is free. It does not make sense to substitute 7 for x but substitution for y makes sense.
 
@@ -108,10 +108,12 @@ M \in \Lambda, x \in V &\implies (\lambda xM) \in \Lambda \\
 \end{aligned}
 $$
 The same three rules, written as a formal grammar — according to Barendregt's own Def 2.1:
-$$\begin{aligned}
-\texttt{<variable>} &::= \texttt{v} \mid \texttt{<variable>}\,' \\
+$$
+\begin{aligned}
+\texttt{<variable>} &::= \texttt{v} \mid \texttt{<variable>}\,{}' \\
 \texttt{<}\lambda\texttt{-term>} &::= \texttt{<variable>} \mid \texttt{(<}\lambda\texttt{-term><}\lambda\texttt{-term>)} \mid \texttt{(}\lambda\texttt{<variable><}\lambda\texttt{-term>)}
-\end{aligned}$$
+\end{aligned}
+$$
 Rojas gives an equivalent grammar for the same three rules, using a dot as the separator between a binder and its body instead of Barendregt's parentheses-only style:
 $$
 \begin{aligned}
@@ -233,7 +235,7 @@ $$
 $$
 (Rojas, §1)
 
-But $\equiv$ is checked on shape, not on meaning, so it can fail even between terms that end up computing to the same thing:
+But $\textcolor{#ce9178}{\equiv}$ is checked on shape, not on meaning, so it can fail even between terms that end up computing to the same thing:
 $$
 \begin{aligned}
 (\lambda xx)z &\not\equiv z; \\
@@ -246,6 +248,32 @@ $$
 > $(\lambda x. x)z \not\equiv z$ above, and yet $(\lambda x. x)z = z$ is also true — see the $(\beta)$ axiom under [[lambda-calculus#^beta-axiom|Application and abstraction]]: $(\lambda x. M)N = M[x := N]$.
 > $\textcolor{#ce9178}{\equiv}$ is syntactic: two terms are $\textcolor{#ce9178}{\equiv}$ if they're the same term, or become the same term by renaming a bound variable — checked on shape alone, before any reduction happens. $\textcolor{#ce9178}{=}$ is the equational theory built from $(\beta)$; it's what actually lets you rewrite $(\lambda x.x)z$ down to $z$. An application can never become $\textcolor{#ce9178}{\equiv}$ to a bare variable no matter how you rename its bound variables, because renaming can't change a term's shape from "application" to "variable" — only reduction ($\textcolor{#ce9178}{=}$) can get you from one to the other.
 
+### Renaming is not unconditional
+
+Now that we know about scoping and shadowing rules, and how two functions can be
+equivalent, can we rename a bound variable to anything we want? Not really.
+
+Take $(\lambda x. \, \lambda y. \, x) \, y$ and apply the $\beta$ reduction rule. Since $\lambda x. \, \lambda y. \, x$ is a function, we apply it to $y$ by substituting $y$ for $x$ in $\lambda y. \, x$. Done naively we get $\lambda y. \, y$, which is a totally different function : `the identity`, and we did not start with an identity function. 
+
+The correct answer is $\lambda y'. \, y$: we rename the binder out of the way first, giving
+$\lambda y'. \, x$, and then substitute, so the body still refers to the free $y$ from outside.
+
+Note which name moves. It is the binder that gets renamed, not the occurrence in the body.
+
+An example would be to think of macros in C. Imagine we have this:
+
+```c
+#define SWAP(a, b) { int tmp = a; a = b; b = tmp; }
+
+int x = 1, tmp = 2;
+SWAP(x, tmp);
+```
+
+The call expands to: `{ int tmp = x; x = tmp; tmp = tmp; }`
+The macro's own `tmp` shadows the caller's, so `x = tmp` reads the macro's `tmp` — which
+already holds `x` — and assigns `x` back to itself. The caller's `tmp` is never touched:
+`x` stays `1`, `tmp` stays `2`, and the swap silently does nothing. Nothing was
+overwritten; a name that referred to the caller's variable got captured by a nearer binder.
 ## Resources
 
 - [[resources#^res-72f015c2|Introduction to Lambda Calculus]]
