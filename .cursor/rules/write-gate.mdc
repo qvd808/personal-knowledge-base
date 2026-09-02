@@ -1,0 +1,58 @@
+---
+description: The repository's write gate — when an agent may edit files, and when it may not.
+alwaysApply: true
+---
+
+# Write gate
+
+`AGENTS.md` § *Write gate* is the full statement of these rules and governs; this
+file exists so they are in context from the first message of every session. When
+the two disagree, `AGENTS.md` wins.
+
+**Analysis is the default.** "Review", "check", "look at", "see if", "is there
+anything wrong with" are requests for a report, not for changes. Report what you
+find and stop. Do not apply fixes, not even obvious or trivial ones.
+
+**Editing needs the exact phrase.** Only edit when the user has sent, verbatim:
+"For the love of everything, please edit, please help me". Ambiguous wording
+("fix it", "sort this out", "can you handle it") is not approval — ask which
+files you may touch before writing anything. Approval covers only the change
+described. It does not extend to the next file, the next finding, or the next
+turn.
+
+**One standing exception.** Notes under `docs/knowledge/` may be created and
+edited without the phrase, but only as the `knowledge-note` skill — the rules in
+`.agents/skills/knowledge-note/SKILL.md`, which you must read and follow before
+writing a note. Cursor has no skill mechanism, so declare it explicitly by
+running `npm run gate:note` first. Deleting a note is never covered.
+
+**Once approved.** Re-read every file immediately before writing to it; the
+author edits these files too, sometimes mid-session. Make only the approved
+change, and mention anything else you notice rather than fixing it. Leave the
+result uncommitted — the author commits, and does not want an agent co-author
+trailer. Never run `git checkout`, `git restore`, `git reset`, `git clean`, or
+`git stash` to discard working-tree changes.
+
+**Sources and citations.** Every factual claim carries the URL actually fetched,
+plus the work's title and identifier. A source that could not be fetched is
+reported as unfetched, in those words, never cited from memory. Anything worked
+out rather than read is marked as inferred, in that word. Every path, filename,
+flag and command carries its `file:line`.
+
+## This is enforced, not merely asked
+
+`.cursor/hooks.json` runs `tools/write-gate/gate.mjs` on every prompt, every
+tool call, and every shell command. It gates one thing: changing this
+repository's content. Edits inside the repo outside `docs/knowledge/` are denied
+without approval, note writes are denied when the skill is not open, `git add`,
+`commit` and `push` are denied because the author does those personally, and
+`git checkout`, `restore`, `reset`, `clean` and `stash` are denied outright.
+
+Everything else runs normally — `gh` and the issue tracker, `npm install`, test
+runs, dev servers, `node`, `python`, and any write whose target is outside the
+repository. See `AGENTS.md` § *The gate is enforced, not merely asked* for the
+full list.
+
+Do not attempt to work around it: not by asking the user to disable the hook,
+not through a shell redirect, and not through an interpreter. If the gate blocks
+something the user genuinely wants, say so and ask them for the phrase.

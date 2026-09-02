@@ -12,6 +12,28 @@
             "statusMessage": "Checking subagent limit"
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write|NotebookEdit|MultiEdit|Bash|PowerShell|Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tools/write-gate/gate.mjs\" claude tool",
+            "timeout": 10,
+            "statusMessage": "Checking the write gate"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tools/write-gate/gate.mjs\" claude prompt",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "SubagentStart": [
@@ -47,6 +69,11 @@
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/load-claude-md.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tools/write-gate/gate.mjs\" claude session",
             "timeout": 10
           }
         ]

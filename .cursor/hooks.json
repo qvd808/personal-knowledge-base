@@ -1,0 +1,35 @@
+{
+	"version": 1,
+	"hooks": {
+		"beforeSubmitPrompt": [
+			{
+				"type": "command",
+				"command": "node ./tools/write-gate/gate.mjs cursor prompt",
+				"timeout": 10
+			}
+		],
+		"preToolUse": [
+			{
+				"type": "command",
+				"command": "node ./tools/write-gate/gate.mjs cursor tool",
+				"timeout": 10,
+				"failClosed": true
+			}
+		],
+		"beforeShellExecution": [
+			{
+				"type": "command",
+				"command": "node ./tools/write-gate/gate.mjs cursor tool",
+				"timeout": 10,
+				"failClosed": true
+			}
+		],
+		"sessionStart": [
+			{
+				"type": "command",
+				"command": "node ./tools/write-gate/gate.mjs cursor session",
+				"timeout": 10
+			}
+		]
+	}
+}

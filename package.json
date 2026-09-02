@@ -7,6 +7,7 @@
 		"node": ">=22"
 	},
 	"scripts": {
+		"gate:note": "node tools/write-gate/gate.mjs cursor open",
 		"glue": "tsx tools/skill-glue/generate.ts",
 		"glue:check": "tsx tools/skill-glue/generate.ts --check",
 		"index": "tsx tools/index-generator/generate.ts",
